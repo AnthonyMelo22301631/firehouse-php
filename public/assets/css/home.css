@@ -1,0 +1,91 @@
+:root {
+  --bg: #0e0e10;
+  --text: #f3f3f3;
+  --accent: #ff4500;
+  --accent-2: #ff6a00;
+  --header-height: 72px;
+}
+
+/* ===== RESET + BASE ===== */
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding-top: var(--header-height);
+}
+
+main.conteudo { flex: 1; }
+
+/* ===== NAVBAR ===== */
+.navbar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: #111;
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  border-bottom: 2px solid var(--accent);
+}
+
+.navbar-container {
+  max-width: 1200px; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.logo a, .nav-links a, .nav-actions a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color .3s;
+}
+
+.logo a:hover, .nav-links a:hover, .nav-actions a:hover { color: #fff; }
+.nav-links, .nav-actions { display: flex; gap: 1.5rem; }
+
+/* ===== HERO ===== */
+.hero-container { position: relative; width: 100%; height: 100vh; overflow: hidden; display:flex; align-items:center; justify-content:center; }
+.video-background { position: absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; z-index:-1; }
+.video-background video { width:100%; height:100%; object-fit:cover; }
+.overlay { position:absolute; top:40%; width:100%; text-align:center; color:white; z-index:2; padding:20px; }
+.overlay h1 { font-size:2.5rem; font-weight:bold; line-height:1.3; }
+.btn-container { position:absolute; bottom:10%; width:100%; text-align:center; z-index:2; }
+.btn-principal { background: var(--accent); color:white; padding:12px 24px; font-weight:bold; text-decoration:none; border-radius:6px; transition:background .3s; }
+.btn-principal:hover { background: var(--accent-2); }
+
+/* ===== SERVIÇOS ===== */
+.servicos { background:black; color:white; padding:60px 20px; text-align:center; }
+.grid-servicos { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; max-width:1200px; margin:0 auto; }
+.servicos .card { background:#0a0a0a; border:2px solid var(--accent); border-radius:8px; padding:30px 20px; transition:all .3s; cursor:pointer; }
+.servicos .card .icon { font-size:40px; margin-bottom:15px; }
+.servicos .card h3 { color:var(--accent); font-size:1.5rem; margin-bottom:10px; font-weight:bold; }
+.servicos .card p { font-size:.95rem; line-height:1.5; color:#ddd; }
+.servicos .card:hover { background:white; border-color:white; color:black; transform:translateY(-8px); box-shadow:0 8px 16px rgba(255,255,255,.4); }
+.servicos .card:hover h3 { color:black; }
+.servicos .card:hover p { color:#333; }
+.nota-final { margin-top:40px; font-weight:bold; font-size:1rem; }
+
+/* ===== OFERECEMOS ===== */
+.oferecemos { background:#000; color:white; padding:60px 20px; }
+.oferecemos-container { max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+.oferecemos-texto { flex:1; min-width:300px; margin-bottom:20px; }
+.oferecemos-texto h2 { font-size:2.5rem; font-weight:700; margin-bottom:20px; }
+.oferecemos-texto p { font-size:1.1rem; margin-bottom:20px; line-height:1.6; }
+.btn-veja { display:inline-block; padding:12px 24px; border:2px solid var(--accent); border-radius:8px; color:white; text-decoration:none; font-weight:600; transition:.3s; }
+.btn-veja:hover { background:var(--accent); color:white; }
+.oferecemos-lista { flex:1; min-width:300px; }
+.oferecemos-lista h3 { font-size:1.5rem; font-weight:600; }
+.oferecemos-lista p { line-height:1.6; margin-bottom:20px; }
+
+/* ===== FOOTER ===== */
+footer.footer { background:#111; color:var(--accent); text-align:center; padding:20px; border-top:2px solid var(--accent); margin-top:auto; }
+.footer-container { max-width:1200px; margin:0 auto; }
+.marca { font-weight:700; }

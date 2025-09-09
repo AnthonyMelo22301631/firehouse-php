@@ -1,0 +1,149 @@
+/* ==========================
+   VARIÁVEIS GERAIS
+========================== */
+:root {
+  --bg: #0e0e10;
+  --card: #1a1a1d;
+  --text: #f3f3f3;
+  --muted: #b6b6b6;
+  --accent: #ff4500;
+  --accent-2: #ff6a00;
+  --radius: 12px;
+  --shadow: 0 6px 20px rgba(0,0,0,.4);
+  --header-height: 72px;
+}
+
+/* ==========================
+   BASE
+========================== */
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+body {
+  background-color: var(--bg);
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  padding-top: var(--header-height); /* espaço p/ navbar fixa */
+}
+
+/* ==========================
+   NAVBAR
+========================== */
+.navbar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: #111;
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  border-bottom: 2px solid var(--accent);
+}
+.navbar-container {
+  max-width: 1200px; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo a, .nav-links a, .nav-actions a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color .3s;
+}
+.logo a:hover, .nav-links a:hover, .nav-actions a:hover { color: #fff; }
+.nav-links, .nav-actions { display: flex; gap: 1.5rem; }
+
+/* ==========================
+   CONTEÚDO
+========================== */
+main.conteudo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+}
+.container { width: 100%; max-width: 400px; }
+
+.titulo {
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+/* mensagens */
+.erro {
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid #dc2626;
+  padding: 10px;
+  border-radius: var(--radius);
+  color: #ff6b6b;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* card */
+.form-card {
+  background: var(--card);
+  padding: 25px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+label { font-weight: 600; }
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 11px;
+  border-radius: var(--radius);
+  border: 1px solid #2b2b2f;
+  background: #0f0f11;
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.15);
+}
+
+/* botão */
+.btn {
+  background: linear-gradient(45deg, var(--accent), var(--accent-2));
+  border: none;
+  padding: 12px;
+  border-radius: var(--radius);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.btn:hover { transform: translateY(-2px); opacity: .9; }
+
+/* links */
+.link-login { margin-top: 15px; text-align: center; }
+.link-login a { color: var(--accent); font-weight: 700; text-decoration: none; }
+.link-login a:hover { text-decoration: underline; }
+
+/* ==========================
+   FOOTER
+========================== */
+footer.footer {
+  background: #111;
+  color: var(--accent);
+  text-align: center;
+  padding: 20px;
+  border-top: 2px solid var(--accent);
+  margin-top: auto;
+}
+.footer-container { max-width: 1200px; margin: 0 auto; }
+.marca { font-weight: 700; }
