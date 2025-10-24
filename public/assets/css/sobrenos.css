@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+  --bg: #fafafa;
+  --card: #ffffff;
+  --text: #222;
+  --muted: #555;
+  --accent: #ff7a00;
+  --accent-2: #ff9a3c;
+  --radius: 14px;
+  --shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* GERAL */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.sobre-container section {
+  padding: 80px 20px;
+  transition: all 0.4s ease;
+}
+
+/* HERO */
+.hero-sobre {
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  color: #fff;
+  text-align: center;
+  padding: 120px 20px;
+}
+
+.hero-sobre h1 {
+  font-size: 2.6rem;
+  margin-bottom: 12px;
+}
+
+.hero-sobre h1 span {
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.hero-sobre p {
+  font-size: 1.1rem;
+  max-width: 650px;
+  margin: 0 auto 30px;
+  color: #f3f3f3;
+}
+
+.btn-laranja {
+  background: #fff;
+  color: var(--accent);
+  font-weight: 600;
+  padding: 12px 26px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-laranja:hover {
+  background: #f1f1f1;
+}
+
+/* SOBRE DETALHES */
+.sobre-detalhes {
+  background: var(--card);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 60px 40px;
+}
+
+.sobre-detalhes h2 {
+  text-align: center;
+  color: var(--accent);
+  font-size: 2rem;
+  margin-bottom: 25px;
+}
+
+.sobre-detalhes p {
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+}
+
+/* MVV */
+.mvv {
+  text-align: center;
+  background: #fff6ef;
+}
+
+.mvv h2 {
+  color: var(--accent);
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.cards-mvv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.card-mvv {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  flex: 1 1 280px;
+  padding: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-mvv:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-mvv h3 {
+  color: var(--accent);
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+}
+
+.card-mvv p, .card-mvv ul {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* EQUIPE */
+.equipe-sobre {
+  background: linear-gradient(180deg, #fff6ef 0%, #ffe1c5 100%);
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.container-equipe {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.container-equipe h2 {
+  color: var(--accent);
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.intro-equipe {
+  color: var(--muted);
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.grid-equipe {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.membro {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  max-width: 320px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.membro:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.membro img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.membro h3 {
+  color: var(--accent);
+  margin-top: 12px;
+}
+
+.membro p {
+  padding: 0 20px 20px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .hero-sobre h1 {
+    font-size: 2rem;
+  }
+
+  .sobre-detalhes {
+    padding: 40px 20px;
+  }
+
+  .cards-mvv {
+    flex-direction: column;
+  }
+
+  .membro img {
+    height: 200px;
+  }
+}

@@ -1,0 +1,121 @@
+/* ===== Cadastrar Serviço (create-colaboradores.css) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #fafafa;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* ===== CONTEÚDO ===== */
+.conteudo {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px 80px;
+}
+
+.container {
+  background: #fff;
+  padding: 40px 50px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 620px;
+  box-sizing: border-box;
+}
+
+.titulo {
+  color: #ff4500;
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.descricao {
+  text-align: center;
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 35px;
+}
+
+/* ===== FORMULÁRIO ===== */
+.form-servico {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+/* Inputs e Textarea */
+input, textarea, select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-family: 'Poppins', sans-serif;
+  resize: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #ff4500;
+  box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.15);
+  outline: none;
+}
+
+/* Select estilizado */
+select {
+  background: #fff;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ff4500' d='M5 7l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+}
+
+/* Botão */
+.btn-principal {
+  background: #ff4500;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-principal:hover {
+  background: #ff6a00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(255, 69, 0, 0.3);
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .container {
+    padding: 30px 25px;
+  }
+
+  .titulo {
+    font-size: 1.6rem;
+  }
+
+  .btn-principal {
+    font-size: 0.95rem;
+  }
+}

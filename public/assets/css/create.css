@@ -1,139 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 :root {
-  --bg: #0e0e10;
-  --card: #1a1a1d;
-  --text: #f3f3f3;
-  --muted: #b6b6b6;
-  --accent: #ff4500;
-  --accent-2: #ff6a00;
+  --bg: #fafafa;
+  --card: #ffffff;
+  --text: #222;
+  --muted: #555;
+  --accent: #ff7a00;
+  --accent-2: #ff9a3c;
   --radius: 12px;
-  --shadow: 0 6px 20px rgba(0,0,0,.4);
-  --header-height: 72px;
+  --shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  --header-height: 80px;
 }
 
 /* ===== BASE ===== */
-html, body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
 body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
   background: var(--bg);
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
   color: var(--text);
   padding-top: var(--header-height);
 }
 
-/* ===== HEADER ===== */
-.navbar {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: var(--header-height);
-  background: #111;
-  border-bottom: 2px solid var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 2rem;
-  z-index: 1000;
-}
-.navbar-container {
-  max-width: 1200px; width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.logo a, .nav-links a, .nav-actions a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color .3s;
-}
-.logo a:hover, .nav-links a:hover, .nav-actions a:hover { color: #fff; }
-.nav-links, .nav-actions { display: flex; gap: 1.5rem; }
-
-/* ===== FOOTER ===== */
-footer.footer {
-  background: #111;
-  color: var(--accent);
+/* ===== HERO ===== */
+.hero-create {
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  color: #fff;
   text-align: center;
-  padding: 20px;
-  border-top: 2px solid var(--accent);
-  margin-top: auto;
+  padding: 100px 20px 80px;
 }
-.footer-container { max-width: 1200px; margin: 0 auto; }
-.marca { font-weight: 700; }
 
-/* ===== CONTEÚDO (Create) ===== */
-main.conteudo {
-  flex: 1;
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+.hero-create h1 {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
 }
-.container {
-  width: 100%;
+
+.hero-create p {
+  font-size: 1.1rem;
   max-width: 600px;
-}
-.titulo {
-  text-align: center;
-  color: var(--accent);
-  margin-bottom: 20px;
+  margin: 0 auto;
+  color: #f9f9f9;
 }
 
 /* ===== FORM ===== */
+.form-section {
+  padding: 80px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+}
+
 .form-card {
   background: var(--card);
-  padding: 25px;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 22px;
 }
+
+.form-card h2 {
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* ===== ELEMENTOS ===== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
 label {
   font-weight: 600;
-  margin-bottom: 5px;
-  display: block;
+  margin-bottom: 6px;
 }
+
 input[type="text"],
 input[type="datetime-local"],
 select,
 textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border-radius: var(--radius);
-  border: 1px solid #333;
-  background: #0f0f11;
+  border: 1px solid #ddd;
+  background: #fff;
   color: var(--text);
   font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
 }
-textarea { resize: vertical; }
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* ===== CHECKBOXES ===== */
 .checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px 20px;
 }
+
 .checkbox-group label {
   font-weight: normal;
   color: var(--muted);
+  font-size: 0.95rem;
 }
 
 /* ===== BOTÃO ===== */
-.btn {
-  background: linear-gradient(45deg, var(--accent), var(--accent-2));
+.btn-enviar {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
   border: none;
-  padding: 12px;
-  border-radius: var(--radius);
   color: #fff;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 14px 0;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
-.btn:hover {
+
+.btn-enviar:hover {
   transform: translateY(-2px);
   opacity: 0.9;
 }
+
+/* ===== LINHAS ===== */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+  .hero-create h1 {
+    font-size: 2rem;
+  }
+
+  .form-card {
+    padding: 30px 24px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+}
+/* ===== LOCAL (select de locais) ===== */
+#local {
+  appearance: none;
+  background-color: #fff;
+  background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%),
+                    linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+#local:focus {
+  border-color: var(--accent);
+}
+
+optgroup {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+option {
+  color: #333;
+}
+

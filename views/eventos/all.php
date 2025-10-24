@@ -5,87 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eventos | FireHouse</title>
 
-  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS específico -->
-  <link rel="stylesheet" href="/firehouse-php/public/assets/css/all.css">
+  <link rel="stylesheet" href="/firehouse-php/public/assets/css/all.css?v=<?= time(); ?>">
 </head>
+
 <body>
-<header class="navbar">
-  <div class="navbar-container">
-    <!-- LOGO -->
-    <div class="logo">
-      <a href="/firehouse-php/public/">🔥 FireHouse</a>
-    </div>
-
-    <!-- LINKS PRINCIPAIS -->
-    <nav class="nav-links">
-      <a href="/firehouse-php/public/colaboradores">Colaboradores</a>
-      <a href="/firehouse-php/public/eventos/create">Criar Evento</a>
-      <a href="/firehouse-php/public/eventos">Eventos</a>
-    </nav>
-
-    <!-- AÇÕES -->
-    <div class="nav-actions">
-      <?php if (!empty($_SESSION['user_id'])): ?>
-        <a href="/firehouse-php/public/meus-eventos">Meus Eventos</a>
-        <a href="/firehouse-php/public/auth/perfil">Perfil</a>
-        <a href="/firehouse-php/public/auth/logout">Sair</a>
-      <?php else: ?>
-        <a href="/firehouse-php/public/auth/login">Entrar</a>
-        <a href="/firehouse-php/public/auth/register">Cadastrar</a>
-      <?php endif; ?>
-    </div>
-  </div>
-</header>
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+require __DIR__ . '/../partials/header.php';
+?>
 
 <main class="conteudo">
   <div class="container">
-    <h2 class="titulo">📅 Todos os Eventos</h2>
+    <h2 class="titulo">📅 Explore os Eventos Publicados</h2>
+    <p class="subtitulo">Confira eventos criados pela comunidade FireHouse.</p>
 
     <?php if (empty($eventos)): ?>
-      <p class="aviso">Nenhum evento foi criado ainda.</p>
+      <p class="aviso">Nenhum evento disponível no momento.</p>
     <?php else: ?>
-      <div class="tabela-container">
-        <table class="tabela-eventos">
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Local</th>
-              <th>Serviços</th>
-              <th>Tipo</th>
-              <th>Data</th>
-              <th>Criador</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($eventos as $e): ?>
-              <tr>
-                <td><?= htmlspecialchars($e['titulo']) ?></td>
-                <td><?= htmlspecialchars($e['local']) ?></td>
-                <td><?= htmlspecialchars($e['servicos']) ?></td>
-                <td><?= htmlspecialchars($e['tipo']) ?></td>
-                <td><?= date('d/m/Y H:i', strtotime($e['data_evento'])) ?></td>
-                <td><?= htmlspecialchars($e['criador'] ?? '—') ?></td>
-                <td>
-                  <a class="btn-ver" href="/firehouse-php/public/eventos/view?id=<?= (int)$e['id'] ?>">👀 Ver</a>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+      <div class="grid-eventos">
+        <?php foreach ($eventos as $e): ?>
+          <div class="card-evento">
+            
+            <div class="card-header">
+              <h3><?= htmlspecialchars($e['titulo']) ?></h3>
+              <span class="tag-data">
+                <?= date('d/m/Y', strtotime($e['data_evento'] ?? 'now')) ?>
+              </span>
+            </div>
+
+            <div class="card-body">
+              <?php if (!empty($e['cidade']) && !empty($e['estado'])): ?>
+                <p><strong>📍 Local:</strong> <?= htmlspecialchars($e['cidade']) ?>/<?= htmlspecialchars($e['estado']) ?></p>
+              <?php elseif (!empty($e['local'])): ?>
+                <p><strong>📍 Local:</strong> <?= htmlspecialchars($e['local']) ?></p>
+              <?php endif; ?>
+
+              <p><strong>👤 Criado por:</strong> <?= htmlspecialchars($e['criador'] ?? '—') ?></p>
+
+              <p><strong>🗓️ Publicado em:</strong> 
+                <?= isset($e['data_criacao']) ? date('d/m/Y', strtotime($e['data_criacao'])) : '—' ?>
+              </p>
+
+              <p>
+                <strong>Status:</strong>
+                <span class="status-evento status-<?= htmlspecialchars($e['status_evento'] ?? 'desconhecido') ?>">
+                  <?= ucfirst(str_replace('_', ' ', htmlspecialchars($e['status_evento'] ?? 'desconhecido'))) ?>
+                </span>
+              </p>
+            </div>
+
+            <div class="card-footer">
+              <a class="btn-ver" href="/firehouse-php/public/eventos/view?id=<?= (int)$e['id'] ?>">Ver Detalhes</a>
+              
+              <?php if (!empty($_SESSION['tipo']) && 
+                        in_array($_SESSION['tipo'], ['colaborador', 'ambos'])): ?>
+                <a class="btn-candidatar" href="/firehouse-php/public/eventos/candidatar?id=<?= (int)$e['id'] ?>">
+                  Candidatar-se
+                </a>
+              <?php endif; ?>
+            </div>
+
+          </div>
+        <?php endforeach; ?>
       </div>
     <?php endif; ?>
   </div>
 </main>
 
-<footer class="footer">
-  <div class="footer-container">
-    <p>© <?= date('Y') ?> <span class="marca">🔥 FireHouse</span> — Todos os direitos reservados</p>
-    <p class="creditos">Desenvolvido com ❤ para o projeto escolar</p>
-  </div>
-</footer>
+<?php require __DIR__ . '/../partials/footer.php'; ?>
 </body>
 </html>

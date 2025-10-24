@@ -9,39 +9,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS único da Home -->
-  <link rel="stylesheet" href="/firehouse-php/public/assets/css/home.css">
+  <link rel="stylesheet" href="/firehouse-php/public/assets/css/home.css?v=<?php echo time(); ?>">
 </head>
 <body>
-<header class="navbar">
-  <div class="navbar-container">
-    <!-- LOGO -->
-    <div class="logo">
-      <a href="/firehouse-php/public/">🔥 FireHouse</a>
-    </div>
 
-    <!-- LINKS PRINCIPAIS -->
-    <nav class="nav-links">
-      <a href="/firehouse-php/public/colaboradores">Colaboradores</a>
-      <a href="/firehouse-php/public/eventos/create">Criar Evento</a>
-      <a href="/firehouse-php/public/eventos">Eventos</a>
-    </nav>
-
-   <!-- AÇÕES -->
-  <div class="nav-actions">
-  <?php if (!empty($_SESSION['user_id'])): ?>
-    <a href="/firehouse-php/public/meus-eventos">Meus Eventos</a>
-    <a href="/firehouse-php/public/auth/perfil">Perfil</a>
-    <a href="/firehouse-php/public/auth/logout">Sair</a>
-  <?php else: ?>
-    <a href="/firehouse-php/public/auth/login">Entrar</a>
-    <a href="/firehouse-php/public/auth/register">Cadastrar</a>
-  <?php endif; ?>
-</div>
-  </div>
-</header>
+<?php require __DIR__ . '/partials/header.php'; ?>
 
 <main class="conteudo">
-  <!-- HERO COM VÍDEO -->
+  <!-- HERO -->
   <div class="hero-container">
     <div class="video-background">
       <video autoplay muted loop playsinline>
@@ -93,11 +68,7 @@
   </section>
 </main>
 
-<footer class="footer">
-  <div class="footer-container">
-    <p>© 2025 <span class="marca">🔥 FireHouse</span> — Todos os direitos reservados</p>
-    <p class="creditos">Desenvolvido com ❤ para o projeto escolar</p>
-  </div>
-</footer>
+<?php require __DIR__ . '/partials/footer.php'; ?>
+
 </body>
 </html>

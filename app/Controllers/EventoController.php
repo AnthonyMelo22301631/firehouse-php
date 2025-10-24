@@ -3,73 +3,86 @@ namespace App\Controllers;
 
 use App\Core\View;
 use App\Repositories\EventoRepository;
-use App\Repositories\ComentarioRepository;
+use App\Repositories\AvaliacaoRepository;
+use App\Repositories\ColaboradorRepository;
 
-class EventoController {
+class EventoController
+{
     private EventoRepository $repo;
+    private AvaliacaoRepository $avaliacaoRepo;
+    private ColaboradorRepository $colabRepo;
 
-    public function __construct() {
+    public function __construct()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $this->repo = new EventoRepository();
+        $this->avaliacaoRepo = new AvaliacaoRepository();
+        $this->colabRepo = new ColaboradorRepository();
     }
 
-    /**
-     * Lista todos os eventos (geral)
-     */
-    public function all() {
+    /** 🔒 Garante que o usuário esteja logado */
+    private function require_login(): void
+    {
+        if (empty($_SESSION['user_id'])) {
+            header('Location: /firehouse-php/public/auth/login');
+            exit;
+        }
+    }
+
+    /** 🔹 Lista todos os eventos */
+    public function all(): string
+    {
         $eventos = $this->repo->all();
         return View::render('eventos/all', ['eventos' => $eventos]);
     }
 
-    /**
-     * Lista apenas os eventos do usuário logado
-     */
-    public function myEvents() {
-        require_login();
-        $eventos = $this->repo->allByUser($_SESSION['uid']);
+    /** 🔹 Lista apenas os eventos do usuário logado */
+    public function myEvents(): string
+    {
+        $this->require_login();
+        $eventos = $this->repo->allByUser((int)$_SESSION['user_id']);
         return View::render('eventos/my', ['eventos' => $eventos]);
     }
 
-    /**
-     * Formulário de criação
-     */
-    public function create() {
-        require_login();
+    /** 🔹 Página de criação de evento */
+    public function create(): string
+    {
+        $this->require_login();
         return View::render('eventos/create');
     }
 
-    /**
-     * Salva novo evento
-     */
-    public function store() {
-        require_login();
+    /** 🔹 Armazena novo evento */
+    public function store(): void
+    {
+        $this->require_login();
 
         $data = [
-            'user_id'     => $_SESSION['uid'],
-            'titulo'      => $_POST['titulo'] ?? '',
-            'local'       => $_POST['local'] ?? '',
-            'servicos'    => is_array($_POST['servicos'] ?? null) 
-                                ? implode(',', $_POST['servicos']) 
-                                : ($_POST['servicos'] ?? ''), 
-            'tipo'        => $_POST['tipo'] ?? '',
-            'data_evento' => $_POST['data_evento'] ?? '',
-            'descricao'   => $_POST['descricao'] ?? '',
+            'user_id' => $_SESSION['user_id'],
+            'titulo' => trim($_POST['titulo'] ?? ''),
+            'tipo' => trim($_POST['tipo'] ?? ''),
+            'local' => trim($_POST['local'] ?? ''),
+            'cidade' => trim($_POST['cidade'] ?? ''),
+            'estado' => trim($_POST['estado'] ?? ''),
+            'servicos' => is_array($_POST['servicos'] ?? null)
+                ? implode(',', $_POST['servicos'])
+                : trim($_POST['servicos'] ?? ''),
+            'data_evento' => trim($_POST['data_evento'] ?? ''),
+            'descricao' => trim($_POST['descricao'] ?? ''),
+            'status_evento' => 'aberto'
         ];
 
-        if (trim($data['titulo']) === '' || trim($data['local']) === '' || trim($data['tipo']) === '' || trim($data['data_evento']) === '') {
-            return View::render('eventos/create', ['error' => 'Preencha todos os campos obrigatórios.']);
-        }
-
         $this->repo->create($data);
-
         header('Location: /firehouse-php/public/meus-eventos');
         exit;
     }
 
-    /**
-     * Formulário de edição
-     */
-    public function edit() {
-        require_login();
+    /** 🔹 Página de edição */
+    public function edit(): string
+    {
+        $this->require_login();
 
         $id = $_GET['id'] ?? null;
         if (!$id) {
@@ -78,107 +91,135 @@ class EventoController {
         }
 
         $evento = $this->repo->findById((int)$id);
-
-        if (!$evento || $evento['user_id'] != $_SESSION['uid']) {
-            header('Location: /firehouse-php/public/meus-eventos');
-            exit;
+        if (!$evento) {
+            http_response_code(404);
+            return "Evento não encontrado.";
         }
 
         return View::render('eventos/edit', ['evento' => $evento]);
     }
 
-    /**
-     * Atualiza evento
-     */
-    public function update() {
-        require_login();
-        $id = $_POST['id'] ?? null;
+    /** 🔹 Atualiza os dados de um evento */
+    public function update(): void
+    {
+        $this->require_login();
 
-        if (!$id || !$this->repo->belongsToUser($id, $_SESSION['uid'])) {
+        $id = $_POST['id'] ?? null;
+        if (!$id) {
             header('Location: /firehouse-php/public/meus-eventos');
             exit;
         }
 
         $data = [
-            'titulo'      => $_POST['titulo'] ?? '',
-            'local'       => $_POST['local'] ?? '',
-            'servicos'    => is_array($_POST['servicos'] ?? null) 
-                                ? implode(',', $_POST['servicos']) 
-                                : ($_POST['servicos'] ?? ''), 
-            'tipo'        => $_POST['tipo'] ?? '',
-            'data_evento' => $_POST['data_evento'] ?? '',
-            'descricao'   => $_POST['descricao'] ?? '',
+            'titulo' => trim($_POST['titulo'] ?? ''),
+            'tipo' => trim($_POST['tipo'] ?? ''),
+            'local' => trim($_POST['local'] ?? ''),
+            'cidade' => trim($_POST['cidade'] ?? ''),
+            'estado' => trim($_POST['estado'] ?? ''),
+            'servicos' => is_array($_POST['servicos'] ?? null)
+                ? implode(',', $_POST['servicos'])
+                : trim($_POST['servicos'] ?? ''),
+            'data_evento' => trim($_POST['data_evento'] ?? ''),
+            'descricao' => trim($_POST['descricao'] ?? '')
         ];
 
         $this->repo->update((int)$id, $data);
-
         header('Location: /firehouse-php/public/meus-eventos');
         exit;
     }
 
-    /**
-     * Exclui evento
-     */
-    public function delete() {
-        require_login();
+    /** 🔹 Exibe um evento específico */
+    public function view(): string
+    {
         $id = $_GET['id'] ?? null;
-
-        if ($id && $this->repo->belongsToUser($id, $_SESSION['uid'])) {
-            $this->repo->deleteById((int)$id, $_SESSION['uid']);
-        }
-
-        header('Location: /firehouse-php/public/meus-eventos');
-        exit;
-    }
-
-    /**
-     * Página de detalhes de evento (com comentários)
-     */
-    public function view() {
-        require_login();
-        $id = (int)($_GET['id'] ?? 0);
-        if (!$id) { 
-            header('Location: /firehouse-php/public/eventos'); 
-            exit; 
-        }
-
-        $evento = $this->repo->findById($id);
-        if (!$evento) { 
-            header('Location: /firehouse-php/public/eventos'); 
-            exit; 
-        }
-
-        $comentarioRepo = new ComentarioRepository();
-        $comentarios = $comentarioRepo->allByEvento($id);
-
-        return View::render('eventos/view', [
-            'evento' => $evento,
-            'comentarios' => $comentarios
-        ]);
-    }
-
-    /**
-     * Salvar comentário
-     */
-    public function comentar() {
-        require_login();
-
-        $eventoId = $_POST['evento_id'] ?? null;
-        $conteudo = trim($_POST['conteudo'] ?? '');
-
-        if (!$eventoId || $conteudo === '') {
-            header('Location: /firehouse-php/public/eventos/view?id=' . urlencode($eventoId));
+        if (!$id) {
+            header('Location: /firehouse-php/public/eventos');
             exit;
         }
 
-        $comentarioRepo = new ComentarioRepository();
-        $comentarioRepo->create([
-            'evento_id' => (int)$eventoId,
-            'user_id'   => $_SESSION['uid'],
-            'conteudo'  => $conteudo,
-        ]);
+        $evento = $this->repo->findById((int)$id);
+        return View::render('eventos/view', ['evento' => $evento]);
+    }
 
-        header('Location: /firehouse-php/public/eventos/view?id=' . urlencode($eventoId));
+    /** ✅ Atualiza status e redireciona para feedback ao finalizar */
+    public function atualizarStatus(): void
+    {
+        $this->require_login();
+
+        $eventoId = $_POST['evento_id'] ?? null;
+        $novoStatus = $_POST['status_evento'] ?? null;
+
+        if (!$eventoId || !$novoStatus) {
+            echo json_encode(['success' => false, 'error' => 'Dados ausentes']);
+            return;
+        }
+
+        $ok = $this->repo->atualizarStatusEvento((int)$eventoId, $novoStatus);
+
+        if ($ok && $novoStatus === 'finalizado') {
+            echo json_encode([
+                'success' => true,
+                'redirect' => "/firehouse-php/public/eventos/feedback?id={$eventoId}"
+            ]);
+        } else {
+            echo json_encode(['success' => $ok]);
+        }
+    }
+
+    /** ✅ Página de feedback (cliente avalia colaboradores) */
+    public function feedback(): string
+    {
+        $this->require_login();
+
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            header('Location: /firehouse-php/public/meus-eventos');
+            exit;
+        }
+
+        $evento = $this->repo->findById((int)$id);
+        if (!$evento) {
+            http_response_code(404);
+            return "Evento não encontrado.";
+        }
+
+        $colaboradores = $this->repo->getColaboradoresDoEvento((int)$id);
+
+        return View::render('eventos/feedback', [
+            'evento' => $evento,
+            'colaboradores' => $colaboradores
+        ]);
+    }
+
+    /** ✅ Salva o feedback dado pelo cliente */
+    public function salvarFeedback(): void
+    {
+        $this->require_login();
+
+        $eventoId = $_POST['evento_id'] ?? null;
+        $avaliacoes = $_POST['avaliacoes'] ?? [];
+
+        if (!$eventoId || empty($avaliacoes)) {
+            header("Location: /firehouse-php/public/eventos/feedback?id=$eventoId");
+            exit;
+        }
+
+        foreach ($avaliacoes as $colabId => $dados) {
+            $nota = (int)($dados['nota'] ?? 0);
+            $comentario = trim($dados['comentario'] ?? '');
+
+            if ($nota > 0) {
+                $this->avaliacaoRepo->criar([
+                    'evento_id' => $eventoId,
+                    'colaborador_id' => $colabId,
+                    'cliente_id' => $_SESSION['user_id'],
+                    'nota' => $nota,
+                    'comentario' => $comentario
+                ]);
+            }
+        }
+
+        header('Location: /firehouse-php/public/meus-eventos');
         exit;
     }
 }

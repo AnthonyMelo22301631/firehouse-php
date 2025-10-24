@@ -1,134 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 :root {
-  --bg: #0e0e10;
-  --card: #1a1a1d;
-  --text: #f3f3f3;
-  --muted: #b6b6b6;
-  --accent: #ff4500;
-  --accent-2: #ff6a00;
-  --radius: 10px;
-  --shadow: 0 6px 20px rgba(0,0,0,.4);
-  --header-height: 72px;
+  --bg: #fafafa;
+  --card: #ffffff;
+  --text: #222;
+  --muted: #555;
+  --accent: #ff7a00;
+  --accent-2: #ff9a3c;
+  --radius: 14px;
+  --shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  --header-height: 80px;
 }
 
-/* ===== LAYOUT BASE ===== */
+/* ===== BASE ===== */
 html, body {
   height: 100%;
   margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
 }
 
-body {
-  background: var(--bg);
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
-  color: var(--text);
-  padding-top: var(--header-height);
-}
-
-/* ===== HEADER ===== */
-.navbar {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: var(--header-height);
-  background: #111;
-  border-bottom: 2px solid var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 2rem;
-  z-index: 1000;
-}
-.navbar-container {
-  max-width: 1200px; width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.logo a, .nav-links a, .nav-actions a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color .3s;
-}
-.logo a:hover, .nav-links a:hover, .nav-actions a:hover { color: #fff; }
-.nav-links, .nav-actions { display: flex; gap: 1.5rem; }
-
-/* ===== CONTEÚDO ===== */
+/* Garante que o conteúdo ocupe o espaço até o footer */
 main.conteudo {
   flex: 1;
-  padding: 40px 20px;
+  padding: 60px 20px 60px;
+  margin: 0;
 }
 
 .container {
-  width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
+/* ===== TÍTULOS ===== */
 .titulo {
   text-align: center;
+  font-size: 2.2rem;
   color: var(--accent);
-  margin-bottom: 25px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.subtitulo {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 50px;
 }
 
 .aviso {
   text-align: center;
   color: var(--muted);
-  font-style: italic;
+  font-size: 1rem;
+  margin-top: 40px;
 }
 
-/* ===== TABELA ===== */
-.tabela-container { overflow-x: auto; }
+/* ===== GRID ===== */
+.grid-eventos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 28px;
+}
 
-.tabela-eventos {
-  width: 100%;
-  border-collapse: collapse;
+/* ===== CARD ===== */
+.card-evento {
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  overflow: hidden;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.25s ease;
+  border: 1px solid #f1f1f1;
 }
 
-.tabela-eventos thead {
-  background: linear-gradient(45deg, var(--accent), var(--accent-2));
+.card-evento:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
-.tabela-eventos th, .tabela-eventos td {
-  padding: 12px 16px;
-  text-align: left;
+/* Cabeçalho */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.tabela-eventos th {
+.card-header h3 {
+  font-size: 1.15rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin: 0;
+}
+
+.tag-data {
+  background: var(--accent-2);
   color: #fff;
-  text-transform: uppercase;
-  font-size: 14px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
-.tabela-eventos tr:nth-child(even) { background: #18181b; }
+/* Corpo */
+.card-body {
+  flex: 1;
+  margin-top: 10px;
+}
 
-.tabela-eventos tr:hover {
-  background: rgba(255, 69, 0, 0.1);
-  transition: background .3s;
+.card-body p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.card-body strong {
+  color: var(--accent);
+}
+
+/* Rodapé */
+.card-footer {
+  margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-ver,
+.btn-candidatar {
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
 }
 
 .btn-ver {
-  background: linear-gradient(45deg, var(--accent), var(--accent-2));
-  padding: 6px 12px;
-  border-radius: var(--radius);
+  background: var(--accent);
   color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  transition: transform .2s, opacity .2s;
 }
-.btn-ver:hover { transform: scale(1.05); opacity: .9; }
 
-/* ===== FOOTER ===== */
-footer.footer {
-  background: #111;
-  color: var(--accent);
-  text-align: center;
-  padding: 20px;
-  border-top: 2px solid var(--accent);
-  margin-top: auto;
+.btn-ver:hover {
+  background: var(--accent-2);
 }
-.footer-container { max-width: 1200px; margin: 0 auto; }
-.marca { font-weight: 700; }
+
+.btn-candidatar {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+}
+
+.btn-candidatar:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+  .titulo {
+    font-size: 1.8rem;
+  }
+
+  .grid-eventos {
+    grid-template-columns: 1fr;
+  }
+
+  .card-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-ver,
+  .btn-candidatar {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ===== CORREÇÃO DO ESPAÇO ABAIXO DO FOOTER ===== */
+footer.footer {
+  margin-top: 0;
+  padding-bottom: 0;
+  flex-shrink: 0;
+}
+/* ===== STATUS DOS EVENTOS ===== */
+.status-evento {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+/* Cores específicas por status */
+.status-aberto {
+  background: #22c55e; /* verde */
+  color: #fff;
+}
+
+.status-em_andamento {
+  background: #facc15; /* amarelo */
+  color: #222;
+}
+
+.status-finalizado {
+  background: #dc2626; /* vermelho */
+  color: #fff;
+}
+

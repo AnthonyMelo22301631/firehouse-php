@@ -1,33 +1,39 @@
+CREATE DATABASE firehouse CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE firehouse;
 
--- USERS
-CREATE TABLE IF NOT EXISTS users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE users (
+  id INT(11) NOT NULL AUTO_INCREMENT,
   name VARCHAR(120) NOT NULL,
   email VARCHAR(160) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- EVENTOS
-CREATE TABLE IF NOT EXISTS eventos (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  titulo VARCHAR(160) NOT NULL,
-  descricao TEXT,
+CREATE TABLE eventos (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  user_id INT(11) NOT NULL,
+  titulo VARCHAR(150) NOT NULL,
+  local VARCHAR(100) NOT NULL,
+  servicos VARCHAR(255) DEFAULT NULL,
+  tipo VARCHAR(50) NOT NULL,
   data_evento DATETIME NOT NULL,
-  owner_id INT NOT NULL,
-  cancelado TINYINT(1) NOT NULL DEFAULT 0,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+  descricao TEXT DEFAULT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (id),
+  KEY user_id (user_id),
+  CONSTRAINT eventos_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- COMENTÁRIOS
-CREATE TABLE IF NOT EXISTS comentarios (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  evento_id INT NOT NULL,
-  user_id INT NOT NULL,
-  texto TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (evento_id) REFERENCES eventos(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+CREATE TABLE comentarios (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  evento_id INT(11) NOT NULL,
+  user_id INT(11) NOT NULL,
+  conteudo TEXT NOT NULL,
+  criado_em TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (id),
+  KEY evento_id (evento_id),
+  KEY user_id (user_id),
+  CONSTRAINT comentarios_ibfk_1 FOREIGN KEY (evento_id) REFERENCES eventos (id) ON DELETE CASCADE,
+  CONSTRAINT comentarios_ibfk_2 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

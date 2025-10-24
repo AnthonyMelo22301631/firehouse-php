@@ -1,0 +1,156 @@
+/* ===== Lista de Colaboradores (all-colaboradores.css) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #fafafa;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* ===== CONTEÚDO ===== */
+.conteudo {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px 80px;
+}
+
+.container {
+  max-width: 1000px;
+  width: 100%;
+  background: #fff;
+  padding: 40px 50px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== TÍTULO ===== */
+.titulo {
+  color: #ff4500;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.descricao {
+  text-align: center;
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 40px;
+}
+
+/* ===== BOTÃO PRINCIPAL ===== */
+.btn-principal {
+  display: inline-block;
+  background: #ff4500;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+  margin-bottom: 30px;
+}
+
+.btn-principal:hover {
+  background: #ff6a00;
+  transform: translateY(-2px);
+}
+
+/* ===== LISTA DE SERVIÇOS ===== */
+.servicos-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 22px;
+}
+
+.servico-card {
+  background: #fff;
+  border: 1.5px solid #eee;
+  border-radius: 10px;
+  padding: 22px 24px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.servico-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(255, 69, 0, 0.15);
+}
+
+.servico-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.servico-nome {
+  font-size: 1.2rem;
+  color: #ff4500;
+  font-weight: 700;
+  margin: 0;
+}
+
+.servico-data {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.servico-desc {
+  color: #444;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.servico-colab {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 18px;
+}
+
+/* ===== BOTÃO SECUNDÁRIO ===== */
+.btn-sec {
+  display: inline-block;
+  background: transparent;
+  color: #ff4500;
+  border: 1.5px solid #ff4500;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.btn-sec:hover {
+  background: #ff4500;
+  color: #fff;
+}
+
+/* ===== AVISO ===== */
+.aviso {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .container {
+    padding: 30px 25px;
+  }
+
+  .servicos-lista {
+    grid-template-columns: 1fr;
+  }
+
+  .titulo {
+    font-size: 1.6rem;
+  }
+}

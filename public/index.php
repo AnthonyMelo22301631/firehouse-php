@@ -1,55 +1,91 @@
 <?php
-
+// 🔒 Inicia sessão e ativa debug
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 require __DIR__ . '/../bootstrap.php';
-
 use App\Core\Router;
 
 $router = new Router();
 
-/**
- * Home
- */
+// =======================
+// 🏠 Home
+// =======================
 $router->get('/', 'HomeController@index');
 
-/**
- * Autenticação
- */
+// =======================
+// 🔑 Autenticação
+// =======================
 $router->get('/auth/login', 'AuthController@showLogin');
 $router->post('/auth/login', 'AuthController@login');
-
 $router->get('/auth/register', 'AuthController@showRegister');
 $router->post('/auth/register', 'AuthController@register');
-
 $router->get('/auth/logout', 'AuthController@logout');
 
-/**
- * Perfil
- */
+// =======================
+// 👤 Perfil
+// =======================
 $router->get('/auth/perfil', 'AuthController@perfil');
 
-/**
- * Eventos
- * - /eventos           => lista geral (todos os eventos)
- * - /meus-eventos      => apenas eventos do usuário logado
- * - /eventos/create    => formulário de criação
- * - /eventos/store     => salvar evento (POST)
- * - /eventos/edit      => formulário de edição
- * - /eventos/update    => atualizar evento (POST)
- * - /eventos/delete    => deletar evento
- */
-$router->get('/eventos', 'EventoController@all');             // lista geral
-$router->get('/meus-eventos', 'EventoController@myEvents');   // meus eventos
-$router->get('/eventos/create', 'EventoController@create');   // formulário de criação
-$router->post('/eventos/store', 'EventoController@store');    // salvar evento
-$router->get('/eventos/edit', 'EventoController@edit');       // editar evento ?id=123
-$router->post('/eventos/update', 'EventoController@update');  // atualizar evento
-$router->get('/eventos/delete', 'EventoController@delete');   // deletar evento ?id=123
-$router->get('/eventos/view', 'EventoController@view');   // detalhes do evento
-$router->post('/comentarios/store', 'ComentarioController@store'); // (se for comentar)
-$router->post('/eventos/comentar', 'EventoController@comentar');
+// =======================
+// ℹ️ Sobre Nós
+// =======================
+$router->get('/sobrenos', 'SobreController@index');
 
-/**
- * Despacho
- */
+// =======================
+// FAQ e Contato
+// =======================
+$router->get('/faq', 'FaqController@index');
+$router->get('/contato', 'ContatoController@index');
+
+// =======================
+// 🎉 Eventos
+// =======================
+$router->get('/eventos', 'EventoController@all');
+$router->get('/meus-eventos', 'EventoController@myEvents');
+$router->get('/eventos/create', 'EventoController@create');
+$router->post('/eventos/store', 'EventoController@store');
+$router->get('/eventos/edit', 'EventoController@edit');
+$router->post('/eventos/update', 'EventoController@update');
+$router->get('/eventos/delete', 'EventoController@delete');
+$router->get('/eventos/view', 'EventoController@view');
+
+// ✅ Novas rotas do sistema de status/serviços
+$router->post('/eventos/atualizar-status', 'EventoController@atualizarStatus');
+$router->post('/eventos/marcar-servico', 'EventoController@marcarServico');
+$router->post('/eventos/vincularPorCodigo', 'EventoController@vincularPorCodigo');
+
+// =======================
+// 💬 Comentários
+// =======================
+$router->post('/comentarios/store', 'ComentarioController@store');
+$router->get('/contato', 'ContatoController@index');
+$router->post('/contato/enviar', 'ContatoController@enviar');
+// =======================
+// 🤝 Colaboradores
+// =======================
+$router->get('/colaboradores', 'ColaboradorController@all');
+$router->get('/colaboradores/create', 'ColaboradorController@create');
+$router->post('/colaboradores/store', 'ColaboradorController@store');
+$router->get('/colaboradores/view', 'ColaboradorController@view');
+$router->post('/colaboradores/ativar', 'ColaboradorController@ativar');
+$router->post('/colaboradores/sair', 'ColaboradorController@sair');
+$router->get('/colaboradores/servicos', 'ColaboradorController@servicos');
+
+$router->get('/colaboradores/portfolio', 'ColaboradorController@portfolio');
+$router->get('/eventos/feedback', 'EventoController@feedback');
+$router->post('/eventos/salvarFeedback', 'EventoController@salvarFeedback');
+// =======================
+// 💬 Chat
+// =======================
+$router->post('/chat/iniciar', 'ChatController@iniciar');
+$router->get('/chat/view', 'ChatController@view');
+
+// =======================
+// 🚀 Despacho final
+// =======================
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

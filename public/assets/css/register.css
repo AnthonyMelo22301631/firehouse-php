@@ -1,149 +1,147 @@
-/* ==========================
-   VARIÁVEIS GERAIS
-========================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 :root {
-  --bg: #0e0e10;
-  --card: #1a1a1d;
-  --text: #f3f3f3;
-  --muted: #b6b6b6;
-  --accent: #ff4500;
-  --accent-2: #ff6a00;
+  --bg: #fafafa;
+  --card: #ffffff;
+  --text: #222;
+  --muted: #555;
+  --accent: #ff7a00;
+  --accent-2: #ff9a3c;
   --radius: 12px;
-  --shadow: 0 6px 20px rgba(0,0,0,.4);
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   --header-height: 72px;
 }
 
-/* ==========================
-   BASE
-========================== */
+/* ===== BASE ===== */
 html, body {
   height: 100%;
   margin: 0;
   display: flex;
   flex-direction: column;
 }
+
 body {
   background-color: var(--bg);
-  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: var(--text);
-  padding-top: var(--header-height); /* espaço p/ navbar fixa */
+  padding-top: var(--header-height);
 }
 
-/* ==========================
-   NAVBAR
-========================== */
-.navbar {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: var(--header-height);
-  background-color: #111;
-  padding: 0 2rem;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000;
-  border-bottom: 2px solid var(--accent);
-}
-.navbar-container {
-  max-width: 1200px; width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.logo a, .nav-links a, .nav-actions a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color .3s;
-}
-.logo a:hover, .nav-links a:hover, .nav-actions a:hover { color: #fff; }
-.nav-links, .nav-actions { display: flex; gap: 1.5rem; }
-
-/* ==========================
-   CONTEÚDO
-========================== */
+/* ===== CONTEÚDO ===== */
 main.conteudo {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 40px 20px;
+  padding: 100px 20px 80px; /* 🔥 distância maior do topo */
 }
-.container { width: 100%; max-width: 400px; }
 
+.container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px 30px;
+}
+
+/* ===== TÍTULO ===== */
 .titulo {
   text-align: center;
   color: var(--accent);
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-size: 1.9rem;
+  font-weight: 700;
 }
 
-/* mensagens */
+/* ===== MENSAGEM DE ERRO ===== */
 .erro {
-  background: rgba(220, 38, 38, 0.15);
-  border: 1px solid #dc2626;
+  background: rgba(255, 0, 0, 0.08);
+  border: 1px solid #ff4d4d;
   padding: 10px;
   border-radius: var(--radius);
-  color: #ff6b6b;
+  color: #c60000;
   text-align: center;
   margin-bottom: 15px;
 }
 
-/* card */
+/* ===== FORM ===== */
 .form-card {
-  background: var(--card);
-  padding: 25px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 }
-label { font-weight: 600; }
+
+label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+}
 
 input[type="text"],
 input[type="email"],
 input[type="password"] {
   width: 100%;
-  padding: 11px;
+  padding: 12px;
   border-radius: var(--radius);
-  border: 1px solid #2b2b2f;
-  background: #0f0f11;
+  border: 1px solid #ddd;
+  background: #fff;
   color: var(--text);
   font-size: 15px;
   outline: none;
   transition: border-color .2s ease, box-shadow .2s ease;
 }
+
 input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
 }
 
-/* botão */
+/* ===== BOTÃO ===== */
 .btn {
-  background: linear-gradient(45deg, var(--accent), var(--accent-2));
+  background: var(--accent);
   border: none;
-  padding: 12px;
+  padding: 14px;
   border-radius: var(--radius);
   color: #fff;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform .2s ease, opacity .2s ease;
+  transition: all 0.25s ease;
 }
-.btn:hover { transform: translateY(-2px); opacity: .9; }
 
-/* links */
-.link-login { margin-top: 15px; text-align: center; }
-.link-login a { color: var(--accent); font-weight: 700; text-decoration: none; }
-.link-login a:hover { text-decoration: underline; }
+.btn:hover {
+  background: var(--accent-2);
+  transform: translateY(-2px);
+}
 
-/* ==========================
-   FOOTER
-========================== */
-footer.footer {
-  background: #111;
-  color: var(--accent);
+/* ===== LINK LOGIN ===== */
+.link-login {
+  margin-top: 20px;
   text-align: center;
-  padding: 20px;
-  border-top: 2px solid var(--accent);
-  margin-top: auto;
+  color: var(--muted);
+  font-size: 0.95rem;
 }
-.footer-container { max-width: 1200px; margin: 0 auto; }
-.marca { font-weight: 700; }
+
+.link-login a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-login a:hover {
+  text-decoration: underline;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 480px) {
+  .container {
+    padding: 30px 20px;
+  }
+  .titulo {
+    font-size: 1.6rem;
+  }
+  main.conteudo {
+    padding: 80px 16px 60px;
+  }
+}

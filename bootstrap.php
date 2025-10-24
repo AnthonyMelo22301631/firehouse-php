@@ -1,32 +1,48 @@
 <?php
-// Autoload básico<?php
+// ==========================================
+// 🔥 CONFIGURAÇÃO DE SESSÃO GLOBAL
+// ==========================================
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
-// Conexão PDO única
+// ==========================================
+// 🔧 AUTOLOAD E CONEXÃO COM BANCO
+// ==========================================
 class DB {
-  private static ?PDO $pdo = null;
-  public static function pdo(): PDO {
-    if (!self::$pdo) {
-      $c = require __DIR__ . '/config/database.php';
-      $dsn = "mysql:host={$c['host']}".(isset($c['port']) && $c['port'] ? ";port={$c['port']}" : "").";dbname={$c['dbname']};charset={$c['charset']}";
-      self::$pdo = new PDO($dsn, $c['user'], $c['pass'], [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-      ]);
+    private static ?PDO $pdo = null;
+    public static function pdo(): PDO {
+        if (!self::$pdo) {
+            $c = require __DIR__ . '/config/database.php';
+            $dsn = "mysql:host={$c['host']}" 
+                . (isset($c['port']) && $c['port'] ? ";port={$c['port']}" : "") 
+                . ";dbname={$c['dbname']};charset={$c['charset']}";
+            self::$pdo = new PDO($dsn, $c['user'], $c['pass'], [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]);
+        }
+        return self::$pdo;
     }
-    return self::$pdo;
-  }
 }
 
-// helpers de auth
-function auth_user_id(): ?int { return $_SESSION['uid'] ?? null; }
+// ==========================================
+// 🔒 FUNÇÕES DE AUTENTICAÇÃO
+// ==========================================
+function auth_user_id(): ?int {
+    return $_SESSION['user_id'] ?? null;
+}
+
 function require_login() {
-  if (!auth_user_id()) { header('Location: /firehouse-php/public/auth/login'); exit; }
+    if (!auth_user_id()) {
+        header('Location: /firehouse-php/public/auth/login');
+        exit;
+    }
 }
 
+// ==========================================
+// ⚙️ AUTOLOAD DE CLASSES
+// ==========================================
 spl_autoload_register(function ($class) {
     $prefix = 'App\\';
     $base_dir = __DIR__ . '/app/';
