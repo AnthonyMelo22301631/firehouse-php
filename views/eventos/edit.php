@@ -13,6 +13,10 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
 require __DIR__ . '/../partials/header.php';
+
+use App\Repositories\EventoRepository;
+$repo = new EventoRepository();
+$servicosVinculados = $repo->getServicosVinculados($evento['id']);
 ?>
 
 <main class="conteudo">
@@ -90,17 +94,21 @@ require __DIR__ . '/../partials/header.php';
             <?php 
             $servicos = array_map('trim', explode(',', $evento['servicos'] ?? ''));
             if (!empty($servicos)):
-              foreach ($servicos as $s): ?>
-                <li style="margin-bottom:10px;">
-                  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                    <span style="font-weight:600;min-width:120px;"><?= htmlspecialchars($s) ?></span>
+              foreach ($servicos as $s):
+                $isVinculado = in_array($s, $servicosVinculados);
+            ?>
+              <li style="margin-bottom:10px;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span style="font-weight:600;min-width:120px;"><?= htmlspecialchars($s) ?></span>
 
-                    <input type="text" 
-                      class="codigo-input" 
-                      placeholder="Código (Ex: SRV-123ABC)" 
-                      data-servico="<?= htmlspecialchars($s) ?>" 
-                      style="flex:1;min-width:180px;padding:6px 8px;border:1px solid #ccc;border-radius:6px;">
+                  <input type="text" 
+                    class="codigo-input" 
+                    placeholder="Código (Ex: SRV-123ABC)" 
+                    data-servico="<?= htmlspecialchars($s) ?>" 
+                    <?= $isVinculado ? 'disabled' : '' ?>
+                    style="flex:1;min-width:180px;padding:6px 8px;border:1px solid #ccc;border-radius:6px;">
 
+                  <?php if (!$isVinculado): ?>
                     <button type="button"
                             class="btn-vincular"
                             data-evento="<?= (int)$evento['id'] ?>"
@@ -108,11 +116,15 @@ require __DIR__ . '/../partials/header.php';
                             style="background:#007bff;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">
                       🔗 Vincular
                     </button>
+                  <?php endif; ?>
 
-                    <span class="status-servico" style="margin-left:10px;color:#555;">⏳ Pendente</span>
-                  </div>
-                </li>
-              <?php endforeach;
+                  <span class="status-servico" style="margin-left:10px;<?= $isVinculado ? 'color:#16a34a;' : 'color:#555;' ?>">
+                    <?= $isVinculado ? '✅ Vinculado' : '⏳ Pendente' ?>
+                  </span>
+                </div>
+              </li>
+            <?php 
+              endforeach;
             else: ?>
               <li style="color:#666;">Nenhum serviço cadastrado.</li>
             <?php endif; ?>
@@ -172,7 +184,7 @@ document.querySelectorAll('.btn-vincular').forEach(btn => {
     if (data.success) {
       input.disabled = true;
       const status = btn.parentElement.querySelector('.status-servico');
-      status.textContent = '✅ Encontrado';
+      status.textContent = '✅ Vinculado';
       status.style.color = '#16a34a';
       btn.remove();
     } else {

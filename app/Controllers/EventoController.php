@@ -5,12 +5,14 @@ use App\Core\View;
 use App\Repositories\EventoRepository;
 use App\Repositories\AvaliacaoRepository;
 use App\Repositories\ColaboradorRepository;
+use App\Repositories\ServicoRepository;
 
 class EventoController
 {
     private EventoRepository $repo;
     private AvaliacaoRepository $avaliacaoRepo;
     private ColaboradorRepository $colabRepo;
+    private ServicoRepository $servicoRepo;
 
     public function __construct()
     {
@@ -21,6 +23,7 @@ class EventoController
         $this->repo = new EventoRepository();
         $this->avaliacaoRepo = new AvaliacaoRepository();
         $this->colabRepo = new ColaboradorRepository();
+        $this->servicoRepo = new ServicoRepository();
     }
 
     /** 🔒 Garante que o usuário esteja logado */
@@ -164,6 +167,32 @@ class EventoController
         } else {
             echo json_encode(['success' => $ok]);
         }
+    }
+
+    /** ✅ Vincular um serviço ao evento via código */
+    public function vincularPorCodigo(): void
+    {
+        $this->require_login();
+
+        $eventoId = $_POST['evento_id'] ?? null;
+        $codigoServico = trim($_POST['codigo_servico'] ?? '');
+
+        if (!$eventoId || !$codigoServico) {
+            echo json_encode(['success' => false, 'error' => 'Dados ausentes.']);
+            exit;
+        }
+
+        $servico = $this->servicoRepo->findByCodigo($codigoServico);
+
+        if (!$servico) {
+            echo json_encode(['success' => false, 'error' => 'Serviço não encontrado.']);
+            exit;
+        }
+
+        $ok = $this->repo->vincularServico((int)$eventoId, (int)$servico['id']);
+
+        echo json_encode(['success' => $ok]);
+        exit;
     }
 
     /** ✅ Página de feedback (cliente avalia colaboradores) */
