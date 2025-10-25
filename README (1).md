@@ -1,14 +1,26 @@
 # FireHouse
 
-## Descrição
-O **FireHouse** é um sistema web desenvolvido em PHP para organização e gerenciamento de eventos.  
-O projeto utiliza arquitetura simples em PHP com integração ao MySQL, sendo executado no ambiente **XAMPP**.  
+🔥 Conceito do Site FireHouse
 
-Principais funcionalidades:
-- Cadastro e autenticação de usuários  
-- Criação e listagem de eventos  
-- Área pública e área autenticada  
-- Comentários em eventos  
+O FireHouse é um sistema web de gerenciamento de eventos que conecta organizadores e colaboradores/prestadores de serviço de forma prática e centralizada.
+Seu principal objetivo é facilitar a criação, administração e execução de eventos, oferecendo ferramentas para cadastro, acompanhamento e vinculação de serviços necessários para cada ocasião.
+
+⚙️ Mecânicas principais
+
+Cadastro e autenticação de usuários: permite que organizadores e colaboradores criem contas e acessem suas respectivas áreas.
+
+Criação e edição de eventos: o organizador cadastra detalhes como título, data, local e tipo de evento.
+
+Seleção e vinculação de serviços: o organizador escolhe serviços (como buffet, som, decoração, segurança etc.) e pode vinculá-los diretamente a colaboradores por meio de um código único.
+
+Atualização de status: cada evento pode estar nos estados Aberto, Em andamento ou Finalizado, permitindo o acompanhamento do progresso.
+
+Feedback e avaliação: após o evento, os organizadores podem avaliar os colaboradores, criando um ciclo de confiança entre os usuários.
+
+🎯 Propósito geral
+
+O FireHouse busca automatizar e profissionalizar o processo de organização de eventos, tornando-o mais eficiente, transparente e colaborativo.
+A ideia central é reunir, em uma única plataforma, todos os aspectos do evento — desde o planejamento até a avaliação final —, promovendo comunicação direta, controle e confiabilidade entre as partes envolvidas.
 
 ---
 
