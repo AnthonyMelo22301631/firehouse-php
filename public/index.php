@@ -78,7 +78,11 @@ $router->get('/colaboradores/servicos', 'ColaboradorController@servicos');
 
 $router->get('/colaboradores/portfolio', 'ColaboradorController@portfolio');
 $router->get('/eventos/feedback', 'EventoController@feedback');
+$router->post('/eventos/salvar-feedback', 'EventoController@salvarFeedback');
 $router->post('/eventos/salvarFeedback', 'EventoController@salvarFeedback');
+$router->get('/colaboradores/portfolio-public', 'ColaboradorController@portfolioPublic');
+$router->post('/eventos/finalizar', 'EventoController@finalizar');
+
 // =======================
 // 💬 Chat
 // =======================

@@ -23,7 +23,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 <main class="conteudo">
   <div class="container">
-    <h2 class="titulo">📝 Criar Conta</h2>
+    <h2 class="titulo">Criar Conta</h2>
 
     <?php if (!empty($error)): ?>
       <p class="erro"><?= htmlspecialchars($error) ?></p>

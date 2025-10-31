@@ -1,237 +1,189 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Editar Evento | FireHouse</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/firehouse-php/public/assets/css/edit.css?v=<?= time(); ?>">
+  <link rel="stylesheet" href="/firehouse-php/public/assets/css/header.css?v=<?php echo time(); ?>">
+  <link rel="stylesheet" href="/firehouse-php/public/assets/css/edit.css?v=<?php echo time(); ?>">
 </head>
 
 <body>
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
 require __DIR__ . '/../partials/header.php';
-
-use App\Repositories\EventoRepository;
-$repo = new EventoRepository();
-$servicosVinculados = $repo->getServicosVinculados($evento['id']);
 ?>
 
-<main class="conteudo">
-  <section class="hero-create">
-    <div class="hero-texto">
-      <h1>Editar Evento</h1>
-      <p>Atualize as informações e gerencie os serviços vinculados ao seu evento.</p>
-    </div>
-  </section>
+<main class="conteudo" style="padding: 20px;">
+  <div class="container" style="max-width: 850px; margin:auto;">
+    <h1 style="text-align:center; font-weight:700;">Editar Evento</h1>
 
-  <section class="form-section">
-    <div class="container">
-      <form method="post" action="/firehouse-php/public/eventos/update" class="form-card">
-        <input type="hidden" name="id" value="<?= htmlspecialchars($evento['id']) ?>">
+    <form id="formEditarEvento" method="POST" action="/firehouse-php/public/eventos/update" style="margin-top:25px;">
+      <input type="hidden" name="id" value="<?= htmlspecialchars($evento['id']) ?>">
+      <input type="hidden" name="evento_id" value="<?= htmlspecialchars($evento['id']) ?>">
 
-        <h2>Detalhes do Evento</h2>
+      <label for="titulo">Título:</label>
+      <input type="text" name="titulo" id="titulo" required value="<?= htmlspecialchars($evento['titulo'] ?? '') ?>" class="form-control" style="width:100%; margin-bottom:10px;">
 
-        <div class="form-group">
-          <label for="titulo">Título</label>
-          <input id="titulo" type="text" name="titulo" value="<?= htmlspecialchars($evento['titulo']) ?>" required>
-        </div>
+      <label for="tipo">Tipo:</label>
+      <input type="text" name="tipo" id="tipo" value="<?= htmlspecialchars($evento['tipo'] ?? '') ?>" class="form-control" style="width:100%; margin-bottom:10px;">
 
-        <div class="form-group">
-          <label for="tipo">Tipo</label>
-          <input id="tipo" type="text" name="tipo" value="<?= htmlspecialchars($evento['tipo']) ?>" required>
-        </div>
+      <label for="local">Local:</label>
+      <input type="text" name="local" id="local" value="<?= htmlspecialchars($evento['local'] ?? '') ?>" class="form-control" style="width:100%; margin-bottom:10px;">
 
-        <div class="form-group">
-          <label for="local">Local</label>
-          <input id="local" type="text" name="local" value="<?= htmlspecialchars($evento['local']) ?>" required>
-        </div>
+      <label for="cidade">Cidade:</label>
+      <input type="text" name="cidade" id="cidade" value="<?= htmlspecialchars($evento['cidade'] ?? '') ?>" class="form-control" style="width:100%; margin-bottom:10px;">
 
-        <div class="form-row">
-          <div class="form-group half">
-            <label for="estado">Estado</label>
-            <input id="estado" type="text" name="estado" value="<?= htmlspecialchars($evento['estado']) ?>" required>
-          </div>
-          <div class="form-group half">
-            <label for="cidade">Cidade</label>
-            <input id="cidade" type="text" name="cidade" value="<?= htmlspecialchars($evento['cidade']) ?>" required>
-          </div>
-        </div>
+      <label for="estado">Estado:</label>
+      <input type="text" name="estado" id="estado" value="<?= htmlspecialchars($evento['estado'] ?? '') ?>" class="form-control" style="width:100%; margin-bottom:10px;">
 
-        <div class="form-group">
-          <label for="data_evento">Data e horário</label>
-          <input id="data_evento" type="datetime-local" name="data_evento"
-                 value="<?= date('Y-m-d\TH:i', strtotime($evento['data_evento'])) ?>" required>
-        </div>
+      <h3 style="margin-top:25px;">Gerenciamento dos serviços vinculados</h3>
 
-        <div class="form-group">
-          <label>Serviços desejados</label>
-          <div class="checkbox-group">
-            <?php
-            $selecionados = array_map('trim', explode(',', $evento['servicos'] ?? ''));
-            $servicos = [
-              "Buffet","Coquetel","Bar de Drinks","Churrasco","Food Truck",
-              "DJ","Banda Ao Vivo","Animador","Cerimonialista","Apresentador",
-              "Decoração","Iluminação","Som e Áudio","Palco","Tenda",
-              "Fotógrafo","Filmagem","Cabine de Fotos","Drone",
-              "Segurança","Transporte","Estacionamento","Banheiro Químico","Limpeza",
-              "Brindes Personalizados","Decoração com Balões","Flores e Arranjos","Assessoria Completa","Locação de Espaço"
-            ];
-            foreach ($servicos as $s) {
-              $checked = in_array($s, $selecionados) ? "checked" : "";
-              echo "<label><input type='checkbox' name='servicos[]' value='$s' $checked> $s</label>";
+      <?php
+$servicosSelecionados = $evento['servicos_array'] ?? [];
+if (empty($servicosSelecionados)) {
+    echo "<p style='color:#777;'>Nenhum serviço foi selecionado ao criar o evento.</p>";
+} else {
+    foreach ($servicosSelecionados as $servicoNome):
+        $jaVinculado = false;
+        if (!empty($evento['servicos_vinculados'])) {
+            foreach ($evento['servicos_vinculados'] as $s) {
+                // ✅ Marca como vinculado apenas se o serviço pertencer a este evento
+                if (
+                    (int)$s['evento_id'] === (int)$evento['id'] &&
+                    strcasecmp($s['nome'], $servicoNome) === 0
+                ) {
+                    $jaVinculado = true;
+                    break;
+                }
             }
-            ?>
-          </div>
-        </div>
+        }
+?>
+      <div class="servico-container" style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <label style="width:140px; font-weight:600;"><?= htmlspecialchars($servicoNome) ?></label>
 
-        <!-- 🔹 Gerenciamento individual de vinculação -->
-        <div class="form-group">
-          <label style="margin-top:20px;">Gerenciamento dos serviços vinculados</label>
-          <ul class="lista-servicos">
-            <?php 
-            $servicos = array_map('trim', explode(',', $evento['servicos'] ?? ''));
-            if (!empty($servicos)):
-              foreach ($servicos as $s):
-                $isVinculado = in_array($s, $servicosVinculados);
-            ?>
-              <li style="margin-bottom:10px;">
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                  <span style="font-weight:600;min-width:120px;"><?= htmlspecialchars($s) ?></span>
+        <?php if ($jaVinculado): ?>
+          <input type="text" value="Serviço já vinculado" disabled style="flex:1; background:#e8ffe8; border:1px solid #28a745; padding:6px;">
+          <button type="button" disabled style="background:#28a745; color:#fff; border:none; padding:6px 12px; border-radius:5px;">✅ Vinculado</button>
+        <?php else: ?>
+          <input type="text" name="codigo_servico" placeholder="Código (Ex: SRV-123ABC)" class="form-control" style="flex:1;">
+          <button type="button" class="btn-vincular" style="background:#007bff; color:#fff; border:none; padding:6px 12px; border-radius:5px; cursor:pointer;">🔗 Vincular</button>
+          <span class="status-vinculo" style="margin-left:10px;">⏳ Pendente</span>
+        <?php endif; ?>
+      </div>
+      <?php endforeach; } ?>
 
-                  <input type="text" 
-                    class="codigo-input" 
-                    placeholder="Código (Ex: SRV-123ABC)" 
-                    data-servico="<?= htmlspecialchars($s) ?>" 
-                    <?= $isVinculado ? 'disabled' : '' ?>
-                    style="flex:1;min-width:180px;padding:6px 8px;border:1px solid #ccc;border-radius:6px;">
-
-                  <?php if (!$isVinculado): ?>
-                    <button type="button"
-                            class="btn-vincular"
-                            data-evento="<?= (int)$evento['id'] ?>"
-                            data-servico="<?= htmlspecialchars($s) ?>"
-                            style="background:#007bff;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">
-                      🔗 Vincular
-                    </button>
-                  <?php endif; ?>
-
-                  <span class="status-servico" style="margin-left:10px;<?= $isVinculado ? 'color:#16a34a;' : 'color:#555;' ?>">
-                    <?= $isVinculado ? '✅ Vinculado' : '⏳ Pendente' ?>
-                  </span>
-                </div>
-              </li>
-            <?php 
-              endforeach;
-            else: ?>
-              <li style="color:#666;">Nenhum serviço cadastrado.</li>
-            <?php endif; ?>
-          </ul>
-        </div>
-
-        <!-- 🔹 Botões de controle -->
-        <div style="margin-top:25px;">
-          <button type="button" id="btnProsseguir" class="btn-prosseguir">
-            🚀 Prosseguir evento
-          </button>
-
-          <button type="button" id="btnFinalizar" data-evento="<?= (int)$evento['id'] ?>" class="btn-finalizar" style="margin-left:10px;">
-            🏁 Finalizar evento
-          </button>
-        </div>
-
-        <div class="form-group" style="margin-top:25px;">
-          <label for="descricao">Descrição</label>
-          <textarea id="descricao" name="descricao" rows="5"><?= htmlspecialchars($evento['descricao']) ?></textarea>
-        </div>
-
-        <div class="botoes">
-          <a href="/firehouse-php/public/meus-eventos" class="btn-cancelar">Cancelar</a>
-          <button type="submit" class="btn-enviar">Salvar Alterações</button>
-        </div>
-      </form>
-    </div>
-  </section>
+      <div style="margin-top:25px; display:flex; flex-direction:column; gap:10px;">
+        
+        <button type="button" onclick="finalizarEvento()" style="background:#333; color:#fff; border:none; padding:10px; border-radius:6px; cursor:pointer;">⏹ Finalizar evento</button>
+      </div>
+    </form>
+  </div>
 </main>
 
 <?php require __DIR__ . '/../partials/footer.php'; ?>
 
 <script>
-document.querySelectorAll('.btn-vincular').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const servico = btn.dataset.servico;
-    const evento = btn.dataset.evento;
-    const input = document.querySelector(`.codigo-input[data-servico="${servico}"]`);
-    const codigo = input?.value.trim();
+document.addEventListener("DOMContentLoaded", () => {
+  const botoesVincular = document.querySelectorAll(".btn-vincular");
 
-    if (!codigo) {
-      alert(`Digite o código do serviço: ${servico}`);
-      return;
-    }
+  botoesVincular.forEach(botao => {
+    botao.addEventListener("click", async () => {
+      const container = botao.closest(".servico-container");
+      const input = container.querySelector("input[name='codigo_servico']");
+      const status = container.querySelector(".status-vinculo");
+      const codigo = input.value.trim();
+      const eventoId = document.querySelector("input[name='evento_id']").value;
 
-    btn.disabled = true;
-    btn.textContent = '🔄 Vinculando...';
+      if (!codigo) {
+        alert("Digite o código do serviço (ex: SRV-123ABC).");
+        return;
+      }
 
-    const resp = await fetch('/firehouse-php/public/eventos/vincularPorCodigo', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: `evento_id=${evento}&codigo_servico=${encodeURIComponent(codigo)}`
+      botao.disabled = true;
+      botao.innerHTML = "🔄 Vinculando...";
+      status.innerHTML = "⏳ Pendente";
+
+      try {
+        const formData = new FormData();
+        formData.append("evento_id", eventoId);
+        formData.append("codigo_servico", codigo);
+
+        const response = await fetch("/firehouse-php/public/eventos/vincularPorCodigo", {
+          method: "POST",
+          body: formData
+        });
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          console.error("⚠️ Erro ao interpretar JSON:", jsonError);
+          alert("Erro inesperado na resposta do servidor.");
+          botao.disabled = false;
+          botao.innerHTML = "🔗 Vincular";
+          status.innerHTML = "❌ Erro inesperado";
+          return;
+        }
+
+        if (data.success) {
+          botao.innerHTML = "✅ Vinculado";
+          botao.style.backgroundColor = "#28a745";
+          status.innerHTML = "🟢 Confirmado";
+          input.disabled = true;
+          console.log("✅ Serviço vinculado com sucesso!");
+          setTimeout(() => window.location.reload(), 800);
+        } else {
+          botao.disabled = false;
+          botao.innerHTML = "🔗 Vincular";
+          status.innerHTML = "❌ " + (data.error || "Erro ao vincular serviço");
+          alert(data.error || "Erro ao vincular serviço.");
+        }
+      } catch (err) {
+        console.error("🚨 Erro na conexão ou requisição:", err);
+        botao.disabled = false;
+        botao.innerHTML = "🔗 Vincular";
+        status.innerHTML = "❌ Erro de conexão";
+        alert("Erro ao conectar ao servidor.");
+      }
     });
-
-    const data = await resp.json();
-    if (data.success) {
-      input.disabled = true;
-      const status = btn.parentElement.querySelector('.status-servico');
-      status.textContent = '✅ Vinculado';
-      status.style.color = '#16a34a';
-      btn.remove();
-    } else {
-      alert(data.error || 'Erro ao vincular serviço');
-      btn.disabled = false;
-      btn.textContent = '🔗 Vincular';
-    }
   });
-});
-
-document.getElementById('btnProsseguir').addEventListener('click', async () => {
-  const eventoId = document.querySelector('input[name="id"]').value;
-  const ok = confirm("Deseja prosseguir com o evento? Isso o colocará como 'Em andamento'.");
-  if (!ok) return;
-
-  const resp = await fetch('/firehouse-php/public/eventos/atualizar-status', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `evento_id=${encodeURIComponent(eventoId)}&status_evento=em_andamento`
-  });
-  const data = await resp.json();
-  if (data.success) {
-    alert('Evento marcado como Em andamento! 🚀');
-    location.reload();
-  } else {
-    alert('Erro ao atualizar o status.');
-  }
-});
-
-document.getElementById('btnFinalizar').addEventListener('click', async () => {
-  const eventoId = document.querySelector('input[name="id"]').value;
-  const ok = confirm("Tem certeza que deseja finalizar o evento?");
-  if (!ok) return;
-
-  const resp = await fetch('/firehouse-php/public/eventos/atualizar-status', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `evento_id=${encodeURIComponent(eventoId)}&status_evento=finalizado`
-  });
-  const data = await resp.json();
-  if (data.success) {
-    alert('✅ Evento finalizado com sucesso! Agora você será redirecionado para avaliar os colaboradores.');
-    window.location.href = `/firehouse-php/public/eventos/feedback?id=${encodeURIComponent(eventoId)}`;
-  } else {
-    alert('Erro ao finalizar o evento.');
-  }
 });
 </script>
+<script>
+async function finalizarEvento() {
+  const eventoId = document.querySelector("input[name='evento_id']").value;
+
+  if (!confirm("Tem certeza que deseja finalizar este evento?")) return;
+
+  const formData = new FormData();
+  formData.append("evento_id", eventoId);
+
+  try {
+    const response = await fetch("/firehouse-php/public//eventos/finalizar", {
+      method: "POST",
+      body: formData
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      if (data.redirect) {
+        window.location.href = data.redirect; // ✅ vai para feedback
+      } else {
+        alert("Evento finalizado com sucesso!");
+        location.reload();
+      }
+    } else {
+      alert(data.error || "Erro ao finalizar evento.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Erro na requisição.");
+  }
+}
+</script>
+
+
 </body>
 </html>

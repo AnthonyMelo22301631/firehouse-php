@@ -11,63 +11,73 @@ class ServicoRepository {
         $this->db = DB::pdo();
     }
 
-    /** 🔹 Lista todos os serviços com nome do colaborador */
+    /** 🔹 Lista todos os serviços com o nome do colaborador (usado na página /colaboradores) */
     public function allWithUsers(): array {
         $sql = "SELECT s.*, u.nome AS colaborador
                 FROM servicos s
-                JOIN users u ON s.user_id = u.id
+                INNER JOIN users u ON u.id = s.user_id
                 ORDER BY s.id DESC";
-        return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /** 🔹 Cria um novo serviço */
     public function create(array $data): void {
-        $sql = "INSERT INTO servicos (nome, descricao, preco, user_id)
-                VALUES (:nome, :descricao, :preco, :user_id)";
+        $sql = "INSERT INTO servicos (nome, descricao, user_id, codigo_servico)
+                VALUES (:nome, :descricao, :user_id, :codigo_servico)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            ':nome' => $data['nome'] ?? null,
-            ':descricao' => $data['descricao'] ?? null,
-            ':preco' => $data['preco'] ?? null,
-            ':user_id' => $data['user_id'] ?? null
+            ':nome' => $data['nome'],
+            ':descricao' => $data['descricao'],
+            ':user_id' => $data['user_id'],
+            ':codigo_servico' => $data['codigo_servico'] ?? strtoupper(uniqid('SRV-'))
         ]);
-    }
-
-    /** 🔹 Busca um serviço pelo ID */
-    public function findById(int $id): ?array {
-        $stmt = $this->db->prepare("SELECT * FROM servicos WHERE id = :id");
-        $stmt->execute([':id' => $id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ?: null;
     }
 
     /** 🔹 Lista serviços de um usuário específico */
     public function allByUser(int $userId): array {
-        $stmt = $this->db->prepare("SELECT * FROM servicos WHERE user_id = :id ORDER BY id DESC");
+        $sql = "SELECT s.*, u.nome AS colaborador
+                FROM servicos s
+                INNER JOIN users u ON u.id = s.user_id
+                WHERE s.user_id = :id
+                ORDER BY s.id DESC";
+        $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /** 🔹 Cria um serviço com código e status */
-    public function createWithCodigo(array $data): void {
-        $sql = "INSERT INTO servicos (nome, descricao, preco, user_id, codigo_servico, status)
-                VALUES (:nome, :descricao, :preco, :user_id, :codigo_servico, :status)";
+    /** 🔹 Busca um serviço específico pelo ID (com dados do colaborador) */
+    public function find(int $id): ?array {
+        $sql = "SELECT s.*, 
+                       u.nome AS nome_colaborador, 
+                       u.cidade, 
+                       u.estado, 
+                       u.contato
+                FROM servicos s
+                INNER JOIN users u ON u.id = s.user_id
+                WHERE s.id = :id
+                LIMIT 1";
+
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            ':nome' => $data['nome'] ?? null,
-            ':descricao' => $data['descricao'] ?? null,
-            ':preco' => $data['preco'] ?? null,
-            ':user_id' => $data['user_id'] ?? null,
-            ':codigo_servico' => $data['codigo_servico'] ?? null,
-            ':status' => $data['status'] ?? null
-        ]);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $servico = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $servico ?: null;
     }
 
-    /** 🔹 Busca um serviço pelo código */
+    /** 🔹 Busca um serviço pelo código (usado para vincular evento) */
     public function findByCodigo(string $codigo): ?array {
-        $stmt = $this->db->prepare("SELECT * FROM servicos WHERE codigo_servico = :codigo");
+        $sql = "SELECT s.*, u.nome AS colaborador
+                FROM servicos s
+                INNER JOIN users u ON u.id = s.user_id
+                WHERE s.codigo_servico = :codigo
+                LIMIT 1";
+
+        $stmt = $this->db->prepare($sql);
         $stmt->execute([':codigo' => $codigo]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ?: null;
+        $servico = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $servico ?: null;
     }
 }

@@ -6,9 +6,6 @@
   --header-height: 72px;
 }
 
-/* ⚠️ AVISO: não estilizar HEADER ou FOOTER neste arquivo.
-   Eles são controlados por header.css e footer.css. */
-
 /* ===== RESET + BASE ===== */
 html, body {
   height: 100%;
@@ -24,13 +21,15 @@ body {
   padding-top: var(--header-height);
 }
 
-main.conteudo { flex: 1; }
+main.conteudo {
+  flex: 1;
+}
 
 /* ===== HERO ===== */
 .hero-container {
   position: relative;
   width: 100%;
-  height: 100vh; /* ocupa a altura total da tela */
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,8 +42,8 @@ main.conteudo { flex: 1; }
   left: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   z-index: -1;
+  overflow: hidden;
 }
 
 .video-background video {
@@ -58,94 +57,96 @@ main.conteudo { flex: 1; }
   position: relative;
   z-index: 2;
   text-align: center;
-  color: #222;
+  color: #fff; /* texto branco */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 25px; /* espaço entre texto e botão */
-  height: 100%; /* força o alinhamento vertical */
+  gap: 25px;
+  height: 100%;
+  padding: 0 20px;
 }
 
 .overlay h1 {
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #333;
-  max-width: 800px;
+  color: #fff; /* texto branco */
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
+  max-width: 850px;
   margin: 0 auto;
 }
 
-/* Botão principal */
-.btn-container {
-  position: relative;
-  z-index: 2;
-}
-
+/* ===== BOTÃO PRINCIPAL ===== */
 .btn-principal {
   background: var(--accent);
-  color: white;
-  padding: 14px 28px;
-  font-weight: bold;
+  color: #fff;
+  padding: 14px 34px;
+  font-weight: 700;
   text-decoration: none;
-  border-radius: 8px;
-  transition: background .3s, transform .2s;
+  border-radius: 10px;
   font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(255, 122, 0, 0.4);
 }
 
 .btn-principal:hover {
   background: var(--accent-2);
   transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(255, 154, 60, 0.6);
 }
+
+
 /* ===== SERVIÇOS ===== */
 .servicos {
   background: #fff;
-  color: var(--text);
-  padding: 60px 20px;
+  padding: 80px 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .grid-servicos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
-  max-width: 1200px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
 .servicos .card {
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 30px 20px;
-  transition: all .3s;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 12px;
+  padding: 24px 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  min-height: 200px;
 }
 
 .servicos .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  border-color: var(--accent);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  background: var(--accent-2);
 }
 
-.servicos .card .icon {
-  font-size: 40px;
-  color: var(--accent);
-  margin-bottom: 15px;
+.servicos .icon {
+  font-size: 36px;
+  margin-bottom: 10px;
 }
 
 .servicos .card h3 {
-  color: var(--accent);
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+  font-size: 1.2rem;
   font-weight: 600;
+  margin-bottom: 6px;
 }
 
 .servicos .card p {
-  font-size: .95rem;
-  line-height: 1.5;
-  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  opacity: 0.95;
 }
 
 .nota-final {
@@ -155,73 +156,311 @@ main.conteudo { flex: 1; }
   color: #555;
 }
 
-/* ===== OFERECEMOS ===== */
+/* ===== DESTAQUES ===== */
+.destaques {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1.5rem;
+  padding: 100px 10%;
+  background: #000 url('/firehouse-php/public/assets/images/fundo.jpg') center/cover no-repeat;
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.destaque-card {
+  position: relative;
+  flex: 1;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  height: 460px;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: transform 1s ease, opacity 1s ease;
+}
+
+.destaque-card.centro {
+  height: 520px;
+  transform: translateY(-40px);
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+}
+
+.destaque-card.centro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('/firehouse-php/public/assets/imagens/bg-centro.jpg') center/cover no-repeat;
+  opacity: 0.35;
+  z-index: 0;
+  transition: transform 0.6s ease;
+}
+
+.destaque-card.centro:hover::before {
+  transform: scale(1.08);
+}
+
+.destaque-card.centro * {
+  position: relative;
+  z-index: 2;
+}
+
+.destaque-card.centro img.logo-centro {
+  width: 100px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.destaque-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s ease;
+}
+
+.destaque-card:hover img {
+  transform: scale(1.08);
+}
+
+.destaque-card .texto {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  color: #fff;
+  z-index: 2;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+}
+
+.destaque-card.centro .texto {
+  position: static;
+  text-align: center;
+  color: #fff;
+  text-shadow: none;
+}
+
+.destaque-card .texto h4 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.destaque-card .texto p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.destaque-card.esquerda,
+.destaque-card.direita {
+  transform: translateY(80px);
+}
+
+.destaque-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== O QUE OFERECEMOS (FIRE PREMIUM) ===== */
 .oferecemos {
-  background: #fef8f3;
-  color: var(--text);
-  padding: 60px 20px;
+  background-color: #000 !important;
+  color: #f5f5f5;
+  padding: 100px 20px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .oferecemos-container {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 40px;
 }
 
 .oferecemos-texto {
-  flex: 1;
-  min-width: 300px;
-  margin-bottom: 20px;
+  flex: 1 1 45%;
+  text-align: left;
 }
 
 .oferecemos-texto h2 {
-  font-size: 2.5rem;
+  font-size: 2.6rem;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #333;
+  color: #ff7a00;
 }
 
 .oferecemos-texto p {
   font-size: 1.1rem;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   line-height: 1.6;
-  color: #555;
+  color: #f5f5f5;
 }
 
 .btn-veja {
   display: inline-block;
-  padding: 12px 24px;
-  border: 2px solid var(--accent);
+  padding: 14px 28px;
   border-radius: 8px;
-  color: var(--accent);
+  background: #ff7a00;
+  color: #fff;
   text-decoration: none;
   font-weight: 600;
-  transition: .3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 14px rgba(255, 122, 0, 0.3);
 }
 
 .btn-veja:hover {
-  background: var(--accent);
-  color: white;
+  background: #ff9a3c;
+  transform: translateY(-3px);
+  box-shadow: 0 0 18px rgba(255, 154, 60, 0.5);
 }
 
 .oferecemos-lista {
-  flex: 1;
-  min-width: 300px;
+  flex: 1 1 45%;
+  background: #111;
+  border-radius: 14px;
+  padding: 40px 30px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+.oferecemos-lista div {
+  margin-bottom: 28px;
+  text-align: left;
 }
 
 .oferecemos-lista h3 {
-  font-size: 1.5rem;
+  color: #ff7a00;
+  font-size: 1.3rem;
   font-weight: 600;
-  color: var(--accent);
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.oferecemos-lista h3::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: #ff7a00;
+  border-radius: 50%;
 }
 
 .oferecemos-lista p {
+  color: #ddd;
   line-height: 1.6;
-  margin-bottom: 20px;
-  color: #444;
+  font-size: 0.95rem;
 }
 
+/* ===== FEEDBACK ===== */
+.feedback {
+  background: linear-gradient(180deg, #ff7a00 0%, #ff9a3c 100%);
+  color: #fff;
+  text-align: center;
+  padding: 100px 20px;
+}
 
+.feedback h2 {
+  font-size: 2.3rem;
+  margin-bottom: 50px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.feedback-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.feedback-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 280px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.feedback-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.feedback-card img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 18px;
+  border: 3px solid #fff;
+}
+
+.feedback-card p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+/* ===== FADE-UP ===== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 1s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 992px) {
+  .destaques {
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 5%;
+  }
+
+  .destaque-card {
+    width: 100%;
+    height: 380px;
+  }
+
+  .destaque-card.centro {
+    height: 420px;
+  }
+
+  .oferecemos-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .oferecemos-texto {
+    text-align: center;
+  }
+
+  .oferecemos-lista {
+    text-align: left;
+  }
+
+  .feedback-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+}

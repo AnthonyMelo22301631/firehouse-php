@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 :root {
-  --bg: #fafafa;
+  --bg: #ffffff;
   --card: #ffffff;
   --text: #222;
   --muted: #555;
   --accent: #ff7a00;
   --accent-2: #ff9a3c;
   --radius: 14px;
-  --shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   --header-height: 80px;
 }
 
@@ -24,10 +24,32 @@ html, body {
   flex-direction: column;
 }
 
-/* Garante que o conteúdo ocupe o espaço até o footer */
+/* ===== HERO / CABEÇALHO VISUAL ===== */
+.hero-eventos {
+  background: #ffffff;
+  text-align: center;
+  color: var(--accent);
+  padding: 150px 20px 90px; /* 🔹 mais espaço do topo */
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.hero-eventos h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.hero-eventos p {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* ===== CONTEÚDO ===== */
 main.conteudo {
   flex: 1;
-  padding: 60px 20px 60px;
+  padding: 80px 20px 100px;
   margin: 0;
 }
 
@@ -63,7 +85,7 @@ main.conteudo {
 .grid-eventos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-  gap: 28px;
+  gap: 32px;
 }
 
 /* ===== CARD ===== */
@@ -71,17 +93,19 @@ main.conteudo {
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 24px;
+  padding: 26px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.25s ease;
-  border: 1px solid #f1f1f1;
+  transition: all 0.3s ease;
+  border: 1px solid #f2f2f2;
+  position: relative;
+  overflow: hidden;
 }
 
 .card-evento:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 26px rgba(255, 122, 0, 0.15);
 }
 
 /* Cabeçalho */
@@ -150,6 +174,7 @@ main.conteudo {
 
 .btn-ver:hover {
   background: var(--accent-2);
+  transform: scale(1.05);
 }
 
 .btn-candidatar {
@@ -163,8 +188,41 @@ main.conteudo {
   color: #fff;
 }
 
+/* ===== STATUS ===== */
+.status-evento {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.status-aberto {
+  background: #22c55e;
+  color: #fff;
+}
+
+.status-em_andamento {
+  background: #facc15;
+  color: #222;
+}
+
+.status-finalizado {
+  background: #dc2626;
+  color: #fff;
+}
+
 /* ===== RESPONSIVO ===== */
 @media (max-width: 768px) {
+  .hero-eventos {
+    padding: 130px 20px 60px;
+  }
+
+  .hero-eventos h1 {
+    font-size: 2rem;
+  }
+
   .titulo {
     font-size: 1.8rem;
   }
@@ -184,36 +242,3 @@ main.conteudo {
     text-align: center;
   }
 }
-
-/* ===== CORREÇÃO DO ESPAÇO ABAIXO DO FOOTER ===== */
-footer.footer {
-  margin-top: 0;
-  padding-bottom: 0;
-  flex-shrink: 0;
-}
-/* ===== STATUS DOS EVENTOS ===== */
-.status-evento {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-transform: capitalize;
-}
-
-/* Cores específicas por status */
-.status-aberto {
-  background: #22c55e; /* verde */
-  color: #fff;
-}
-
-.status-em_andamento {
-  background: #facc15; /* amarelo */
-  color: #222;
-}
-
-.status-finalizado {
-  background: #dc2626; /* vermelho */
-  color: #fff;
-}
-

@@ -2,7 +2,8 @@
 namespace App\Controllers;
 
 use App\Core\View;
-use App\Repositories\UserRepository;
+use App\Repositories\UserRepository; // ✅ importação correta
+use Exception;
 
 class AuthController {
     private UserRepository $users;
@@ -12,17 +13,25 @@ class AuthController {
             session_start();
         }
 
-        $this->users = new UserRepository();
+        try {
+            // ✅ garante o carregamento correto da classe UserRepository
+            $this->users = new UserRepository();
+        } catch (Exception $e) {
+            die('Erro ao carregar UserRepository: ' . $e->getMessage());
+        }
     }
 
+    /** 🔹 Exibe tela de login */
     public function showLogin() {
         return View::render('auth/login');
     }
 
+    /** 🔹 Exibe tela de cadastro */
     public function showRegister() {
         return View::render('auth/register');
     }
 
+    /** 🔹 Login */
     public function login() {
         $email = trim($_POST['email'] ?? '');
         $senha = $_POST['password'] ?? '';
@@ -40,6 +49,7 @@ class AuthController {
         exit;
     }
 
+    /** 🔹 Registro */
     public function register() {
         $nome    = trim($_POST['nome'] ?? '');
         $email   = trim($_POST['email'] ?? '');
@@ -48,7 +58,7 @@ class AuthController {
         $cidade  = trim($_POST['cidade'] ?? '');
         $contato = trim($_POST['contato'] ?? '');
 
-        // 🔹 Validação básica
+        // ✅ Validação
         if (
             $nome === '' ||
             !filter_var($email, FILTER_VALIDATE_EMAIL) ||
@@ -57,17 +67,19 @@ class AuthController {
             $cidade === '' ||
             $contato === ''
         ) {
-            return View::render('auth/register', ['error' => 'Dados inválidos. Preencha todos os campos corretamente.']);
+            return View::render('auth/register', [
+                'error' => 'Dados inválidos. Preencha todos os campos corretamente.'
+            ]);
         }
 
         if ($this->users->findByEmail($email)) {
-            return View::render('auth/register', ['error' => 'E-mail já cadastrado.']);
+            return View::render('auth/register', [
+                'error' => 'E-mail já cadastrado.'
+            ]);
         }
 
-        // 🔹 Criptografar senha
         $hash = password_hash($senha, PASSWORD_DEFAULT);
 
-        // 🔹 Inserir usuário
         $user = $this->users->create([
             'nome' => $nome,
             'email' => $email,
@@ -78,7 +90,9 @@ class AuthController {
         ]);
 
         if (!$user) {
-            return View::render('auth/register', ['error' => 'Erro ao cadastrar. Tente novamente.']);
+            return View::render('auth/register', [
+                'error' => 'Erro ao cadastrar. Tente novamente.'
+            ]);
         }
 
         $_SESSION['user_id'] = $user->id;
@@ -88,6 +102,7 @@ class AuthController {
         exit;
     }
 
+    /** 🔹 Logout */
     public function logout() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -115,18 +130,22 @@ class AuthController {
         exit;
     }
 
+    /** 🔹 Exibe perfil do usuário logado ou outro via ID */
     public function perfil() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
+        // ✅ prioriza o usuário logado, mas permite visualizar outro via ?id=#
         $id = $_GET['id'] ?? $_SESSION['user_id'] ?? null;
+
         if (!$id) {
             echo "Usuário não encontrado.";
             return;
         }
 
         $user = $this->users->findById((int)$id);
+
         if (!$user) {
             echo "Perfil não encontrado.";
             return;

@@ -96,7 +96,7 @@
               <span class="estrela" data-valor="<?= $i ?>">★</span>
             <?php endfor; ?>
           </div>
-
+          <input type="hidden" name="avaliacoes[<?= $c['id'] ?>][colaborador_id]" value="<?= $c['id'] ?>">
           <input type="hidden" name="avaliacoes[<?= $c['id'] ?>][nota]" value="0">
           <textarea name="avaliacoes[<?= $c['id'] ?>][comentario]" rows="3" placeholder="Deixe um comentário sobre este colaborador (opcional)..."></textarea>
         </div>

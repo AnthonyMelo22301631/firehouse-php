@@ -66,15 +66,25 @@ require __DIR__ . '/../partials/header.php';
       }
       </script>
 
-      <div class="botoes" style="margin-top:20px;">
-        <a href="/firehouse-php/public/colaboradores" class="btn-voltar">← Voltar</a>
+      <div class="botoes" style="margin-top:20px; display:flex; flex-wrap:wrap; gap:10px;">
+        <a href="/firehouse-php/public/colaboradores" class="btn-voltar" style="background:#ddd; color:#000; text-decoration:none; padding:8px 16px; border-radius:6px;">
+          ← Voltar
+        </a>
 
         <?php 
           $idPerfil = (int)($servico['user_id'] ?? 0);
           if (!empty($_SESSION['user_id']) && $_SESSION['user_id'] !== $idPerfil && $idPerfil > 0): 
         ?>
-          <a href="/firehouse-php/public/auth/perfil?id=<?= $idPerfil ?>" class="btn-contato">
+          <a href="/firehouse-php/public/auth/perfil?id=<?= $idPerfil ?>" class="btn-contato" style="background:#007bff; color:#fff; text-decoration:none; padding:8px 16px; border-radius:6px;">
             💬 Entrar em contato
+          </a>
+        <?php endif; ?>
+
+        <?php if (!empty($idPerfil)): ?>
+          <a href="/firehouse-php/public/colaboradores/portfolio-public?id=<?= $idPerfil ?>" 
+             class="btn-portfolio"
+             style="background:#ff7a00; color:#fff; text-decoration:none; padding:8px 16px; border-radius:6px; font-weight:600;">
+            📂 Ver portfólio do colaborador
           </a>
         <?php endif; ?>
       </div>
