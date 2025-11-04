@@ -22,6 +22,34 @@ class EventoController {
         $this->colabRepo = new ColaboradorRepository();
         $this->servicoRepo = new ServicoRepository();
     }
+public function avaliarView(): string {
+    $this->require_login();
+
+    $eventoId = $_GET['evento_id'] ?? null;
+    $servicoId = $_GET['servico_id'] ?? null;
+
+    if (!$eventoId || !$servicoId) {
+        return "Parâmetros inválidos.";
+    }
+
+    $evento = $this->repo->findById((int)$eventoId);
+    $servico = $this->servicoRepo->find((int)$servicoId);
+
+    if (!$evento || !$servico) {
+        return "Evento ou serviço não encontrado.";
+    }
+
+    // 🔹 Garante que temos o ID do colaborador dono do serviço
+    $colaboradorId = $servico['user_id'] ?? null;
+
+    return View::render('eventos/avaliar', [
+        'evento' => $evento,
+        'servico' => $servico,
+        'colaborador_id' => $colaboradorId
+    ]);
+}
+
+
 
     private function require_login(): void {
         if (empty($_SESSION['user_id'])) {
@@ -30,10 +58,26 @@ class EventoController {
         }
     }
 
-    public function all(): string {
-        $eventos = $this->repo->all();
-        return View::render('eventos/all', ['eventos' => $eventos]);
-    }
+   public function all(): string {
+    // 🔹 Captura filtros via GET
+    $filtros = [
+        'tipo' => $_GET['tipo'] ?? null,
+        'cidade' => $_GET['cidade'] ?? null,
+        'estado' => $_GET['estado'] ?? null,
+        'status_evento' => $_GET['status_evento'] ?? null,
+        'data_min' => $_GET['data_min'] ?? null,
+    ];
+
+    // 🔹 Passa filtros para o repositório
+    $eventos = $this->repo->all($filtros);
+
+    // 🔹 Renderiza view com dados e filtros atuais (pra preencher os campos)
+    return View::render('eventos/all', [
+        'eventos' => $eventos,
+        'filtros' => $filtros
+    ]);
+}
+
 
     public function myEvents(): string {
         $this->require_login();
@@ -68,19 +112,31 @@ class EventoController {
     }
 
     public function edit(): string {
-        $this->require_login();
-        $id = $_GET['id'] ?? null;
-        if (!$id) {
-            header('Location: /firehouse-php/public/meus-eventos');
-            exit;
-        }
-        $evento = $this->repo->findById((int)$id);
-        if (!$evento) {
-            http_response_code(404);
-            return "Evento não encontrado.";
-        }
-        return View::render('eventos/edit', ['evento' => $evento]);
+    $this->require_login();
+    
+    $id = $_GET['id'] ?? null;
+    if (!$id) {
+        header('Location: /firehouse-php/public/meus-eventos');
+        exit;
     }
+
+    // 🔹 Busca o evento no banco
+    $evento = $this->repo->findById((int)$id);
+    if (!$evento) {
+        http_response_code(404);
+        return "Evento não encontrado.";
+    }
+
+    // 🔹 Busca todos os serviços disponíveis (ainda não vinculados)
+    $servicosDisponiveis = $this->servicoRepo->getServicosDisponiveis();
+
+    // 🔹 Envia dados para a view
+    return View::render('eventos/edit', [
+        'evento' => $evento,
+        'servicosDisponiveis' => $servicosDisponiveis
+    ]);
+}
+
 
     public function update(): void {
         $this->require_login();
@@ -106,6 +162,44 @@ class EventoController {
         exit;
     }
 
+    public function delete(): void {
+    $this->require_login(); // Garante que o usuário está logado
+
+    // 🔹 Captura o ID via GET (ex: /eventos/delete?id=5)
+    $id = $_GET['id'] ?? null;
+
+    if (!$id) {
+        // Redireciona se o ID não foi informado
+        header('Location: /firehouse-php/public/meus-eventos');
+        exit;
+    }
+
+    try {
+        // 🔹 Tenta excluir o evento pelo repositório
+        $ok = $this->repo->delete((int)$id);
+
+        if ($ok) {
+            // ✅ Exclusão bem-sucedida → redireciona para a listagem do usuário
+            $_SESSION['flash_success'] = "Evento excluído com sucesso!";
+            header('Location: /firehouse-php/public/meus-eventos');
+            exit;
+        } else {
+            // ❌ Falha na exclusão
+            $_SESSION['flash_error'] = "Erro ao excluir o evento.";
+            header('Location: /firehouse-php/public/meus-eventos');
+            exit;
+        }
+
+    } catch (\Throwable $e) {
+        // ⚠️ Loga erro para depuração
+        error_log("Erro ao excluir evento: " . $e->getMessage());
+        $_SESSION['flash_error'] = "Erro interno ao tentar excluir o evento.";
+        header('Location: /firehouse-php/public/meus-eventos');
+        exit;
+    }
+}
+
+
     public function view(): string {
         $id = $_GET['id'] ?? null;
         if (!$id) {
@@ -125,20 +219,73 @@ class EventoController {
     ]);
 }
 
-public function salvarFeedback(): void {
-    $this->require_login();
-    $eventoId = $_POST['evento_id'];
-    foreach ($_POST['avaliacoes'] as $colabId => $dados) {
-        $this->avaliacaoRepo->salvar([
+public function salvarAvaliacao()
+{
+    try {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // 🔹 Captura os dados enviados via formulário
+        $colaboradorId = $_POST['colaborador_id'] ?? null;
+        $eventoId = $_POST['evento_id'] ?? null;
+        $servicoId = $_POST['servico_id'] ?? null;
+        $nota = $_POST['nota'] ?? null;
+        $comentario = $_POST['comentario'] ?? null;
+
+        // 🔍 Log de depuração
+        error_log("📩 [DEBUG] Dados recebidos em salvarAvaliacao(): " . print_r($_POST, true));
+
+        // 🔹 Validação básica
+        if (empty($colaboradorId) || empty($eventoId) || empty($servicoId)) {
+            echo json_encode(['success' => false, 'error' => 'Dados incompletos.']);
+            exit;
+        }
+
+        if (empty($nota)) {
+            echo json_encode(['success' => false, 'error' => 'Informe uma nota para a avaliação.']);
+            exit;
+        }
+
+        // 🔹 Busca o criador do evento e o nome do cliente
+        $evento = $this->repo->findById((int)$eventoId);
+        $criadorId = $evento['user_id'] ?? null;
+
+        $clienteNome = 'Cliente Anônimo';
+        if ($criadorId) {
+            $stmt = \DB::pdo()->prepare("SELECT nome FROM users WHERE id = :id");
+            $stmt->execute([':id' => $criadorId]);
+            $clienteNome = $stmt->fetchColumn() ?: 'Cliente Anônimo';
+        }
+
+        // 🔹 Insere no portfólio com data atual
+        $this->colabRepo->adicionarAoPortfolio([
+            'colaborador_id' => $colaboradorId,
             'evento_id' => $eventoId,
-            'colaborador_id' => $colabId,
-            'nota' => $dados['nota'],
-            'comentario' => $dados['comentario']
+            'servico_id' => $servicoId,
+            'comentario' => $comentario,
+            'nota' => $nota,
+            'cliente_nome' => $clienteNome
         ]);
+
+        // 🔹 Resposta JSON para o fetch()
+        echo json_encode(['success' => true, 'message' => 'Avaliação registrada com sucesso!']);
+        exit;
+
+    } catch (\Throwable $e) {
+        // ⚠️ Log detalhado do erro
+        error_log("🔥 ERRO AO SALVAR AVALIAÇÃO: " . $e->getMessage());
+        echo json_encode([
+            'success' => false,
+            'error' => 'Erro interno no servidor. Detalhe: ' . $e->getMessage()
+        ]);
+        exit;
     }
-    header('Location: /firehouse-php/public/meus-eventos');
-    exit;
 }
+
+
+
+
 
 
     /** ✅ Atualiza status e redireciona para feedback ao finalizar */
@@ -163,54 +310,44 @@ public function salvarFeedback(): void {
         }
     }
 
-    /** ✅ Vincular um serviço ao evento via código */
-    public function vincularPorCodigo() {
-    // 🔧 LIMPA qualquer saída anterior (evita HTML no JSON)
-      $this->require_login(); // ✅ garante sessão ativa
+    public function vincularServico() {
+    $this->require_login();
     if (ob_get_length()) ob_clean();
     header('Content-Type: application/json; charset=utf-8');
 
     try {
         $eventoId = $_POST['evento_id'] ?? null;
-        $codigo = trim($_POST['codigo_servico'] ?? '');
+        $servicoId = $_POST['servico_id'] ?? null;
 
-        if (!$eventoId || !$codigo) {
+        if (!$eventoId || !$servicoId) {
             echo json_encode(['success' => false, 'error' => 'Dados incompletos.']);
             exit;
         }
 
-        $servicoRepo = new \App\Repositories\ServicoRepository();
-        $servico = $servicoRepo->findByCodigo($codigo);
-
-        if (!$servico) {
-            echo json_encode(['success' => false, 'error' => 'Código de serviço inválido.']);
-            exit;
-        }
-
-        $ok = $this->repo->vincularServico($eventoId, $servico['id']);
+        $ok = $this->repo->vincularServico($eventoId, $servicoId);
 
         if ($ok) {
             echo json_encode(['success' => true, 'message' => 'Serviço vinculado com sucesso!']);
-            exit;
         } else {
-            echo json_encode(['success' => false, 'error' => 'Serviço já vinculado ou erro ao vincular.']);
-            exit;
+            echo json_encode(['success' => false, 'error' => 'Erro ao vincular serviço ou já vinculado.']);
         }
-
     } catch (\Throwable $e) {
         error_log("Erro ao vincular serviço: " . $e->getMessage());
         echo json_encode(['success' => false, 'error' => 'Erro interno no servidor.']);
-        exit;
     }
+    exit;
 }
+
 
 
     /** 🔹 Finalizar evento (muda status e envia ao portfólio) */
     public function finalizar(): void {
-        $this->require_login();
-        header('Content-Type: application/json');
+    $this->require_login();
+    header('Content-Type: application/json; charset=utf-8');
 
+    try {
         $eventoId = $_POST['evento_id'] ?? null;
+
         if (!$eventoId) {
             echo json_encode(['success' => false, 'error' => 'ID do evento não informado']);
             exit;
@@ -222,19 +359,13 @@ public function salvarFeedback(): void {
             exit;
         }
 
-        $colaboradores = $this->repo->getColaboradoresDoEvento((int)$eventoId);
-
-        foreach ($colaboradores as $colab) {
-            $this->colabRepo->adicionarAoPortfolio([
-                'colaborador_id' => $colab['colaborador_id'],
-                'evento_id' => $eventoId
-            ]);
-        }
-
-        echo json_encode([
-            'success' => true,
-            'redirect' => '/firehouse-php/public/colaboradores/portfolio'
-        ]);
+        echo json_encode(['success' => true, 'message' => 'Evento finalizado com sucesso!']);
+        exit;
+    } catch (\Throwable $e) {
+        error_log("Erro ao finalizar evento: " . $e->getMessage());
+        echo json_encode(['success' => false, 'error' => 'Erro interno no servidor.']);
         exit;
     }
+}
+
 }

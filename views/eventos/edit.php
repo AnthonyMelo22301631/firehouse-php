@@ -38,45 +38,57 @@ require __DIR__ . '/../partials/header.php';
       <label for="estado">Estado:</label>
       <input type="text" name="estado" id="estado" value="<?= htmlspecialchars($evento['estado'] ?? '') ?>" class="form-control" style="width:100%; margin-bottom:10px;">
 
-      <h3 style="margin-top:25px;">Gerenciamento dos serviços vinculados</h3>
 
-      <?php
-$servicosSelecionados = $evento['servicos_array'] ?? [];
-if (empty($servicosSelecionados)) {
-    echo "<p style='color:#777;'>Nenhum serviço foi selecionado ao criar o evento.</p>";
-} else {
-    foreach ($servicosSelecionados as $servicoNome):
-        $jaVinculado = false;
-        if (!empty($evento['servicos_vinculados'])) {
-            foreach ($evento['servicos_vinculados'] as $s) {
-                // ✅ Marca como vinculado apenas se o serviço pertencer a este evento
-                if (
-                    (int)$s['evento_id'] === (int)$evento['id'] &&
-                    strcasecmp($s['nome'], $servicoNome) === 0
-                ) {
-                    $jaVinculado = true;
-                    break;
-                }
-            }
-        }
-?>
-      <div class="servico-container" style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
-        <label style="width:140px; font-weight:600;"><?= htmlspecialchars($servicoNome) ?></label>
+      <!-- 🔹 SEÇÃO DE SERVIÇOS -->
+      <h3 style="margin-top:25px;">Gerenciamento de Serviços</h3>
 
-        <?php if ($jaVinculado): ?>
-          <input type="text" value="Serviço já vinculado" disabled style="flex:1; background:#e8ffe8; border:1px solid #28a745; padding:6px;">
-          <button type="button" disabled style="background:#28a745; color:#fff; border:none; padding:6px 12px; border-radius:5px;">✅ Vinculado</button>
-        <?php else: ?>
-          <input type="text" name="codigo_servico" placeholder="Código (Ex: SRV-123ABC)" class="form-control" style="flex:1;">
-          <button type="button" class="btn-vincular" style="background:#007bff; color:#fff; border:none; padding:6px 12px; border-radius:5px; cursor:pointer;">🔗 Vincular</button>
-          <span class="status-vinculo" style="margin-left:10px;">⏳ Pendente</span>
-        <?php endif; ?>
+      <div class="servico-container" style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+        <select name="servico_id" class="form-control servico-select" style="flex:1;">
+          <option value="">Selecione um serviço disponível</option>
+          <?php foreach ($servicosDisponiveis as $s): ?>
+            <option value="<?= $s['id'] ?>">
+              <?= htmlspecialchars($s['nome']) ?> — <?= htmlspecialchars($s['colaborador']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+
+        <button type="button" id="btnVincular" style="background:#007bff; color:#fff; border:none; padding:6px 12px; border-radius:5px; cursor:pointer;">
+          🔗 Vincular
+        </button>
+        <span id="statusVinculo" style="margin-left:10px;">⏳ Aguardando ação</span>
       </div>
-      <?php endforeach; } ?>
 
+     <h4 style="margin-top:20px;">Serviços vinculados:</h4>
+
+<?php if (!empty($evento['servicos_vinculados'])): ?>
+  <ul style="list-style:disc; margin-left:20px;">
+    <?php foreach ($evento['servicos_vinculados'] as $v): ?>
+      <li>
+        <?= htmlspecialchars($v['nome']) ?> — <?= htmlspecialchars($v['colaborador'] ?? '') ?>
+
+        <?php if ($evento['status_evento'] === 'finalizado'): ?>
+          <a href="/firehouse-php/public/eventos/avaliar?evento_id=<?= $evento['id'] ?>&servico_id=<?= $v['id'] ?>" 
+             style="margin-left:10px; background:#28a745; color:#fff; border:none; padding:5px 10px; border-radius:4px; text-decoration:none;">
+             ⭐ Avaliar
+          </a>
+        <?php else: ?>
+          <span style="color:#777; margin-left:10px;">(aguardando finalização do evento)</span>
+        <?php endif; ?>
+      </li>
+    <?php endforeach; ?>
+  </ul>
+<?php else: ?>
+  <p style="color:#777;">Nenhum serviço vinculado ainda.</p>
+<?php endif; ?>
+
+
+      <!-- 🔹 BOTÃO FINALIZAR -->
       <div style="margin-top:25px; display:flex; flex-direction:column; gap:10px;">
-        
-        <button type="button" onclick="finalizarEvento()" style="background:#333; color:#fff; border:none; padding:10px; border-radius:6px; cursor:pointer;">⏹ Finalizar evento</button>
+        <?php if ($evento['status_evento'] !== 'finalizado'): ?>
+          <button type="button" onclick="finalizarEvento()" style="background:#333; color:#fff; border:none; padding:10px; border-radius:6px; cursor:pointer;">⏹ Finalizar evento</button>
+        <?php else: ?>
+          <p style="color:#28a745; font-weight:600;">✅ Este evento foi finalizado.</p>
+        <?php endif; ?>
       </div>
     </form>
   </div>
@@ -84,106 +96,129 @@ if (empty($servicosSelecionados)) {
 
 <?php require __DIR__ . '/../partials/footer.php'; ?>
 
+<!-- 🔹 SCRIPT PRINCIPAL -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const botoesVincular = document.querySelectorAll(".btn-vincular");
+  const btnVincular = document.getElementById("btnVincular");
+  const select = document.querySelector(".servico-select");
+  const status = document.getElementById("statusVinculo");
+  const eventoId = document.querySelector("input[name='evento_id']").value;
 
-  botoesVincular.forEach(botao => {
-    botao.addEventListener("click", async () => {
-      const container = botao.closest(".servico-container");
-      const input = container.querySelector("input[name='codigo_servico']");
-      const status = container.querySelector(".status-vinculo");
-      const codigo = input.value.trim();
-      const eventoId = document.querySelector("input[name='evento_id']").value;
-
-      if (!codigo) {
-        alert("Digite o código do serviço (ex: SRV-123ABC).");
+  // ✅ Vincular Serviço
+  if (btnVincular) {
+    btnVincular.addEventListener("click", async () => {
+      const servicoId = select.value;
+      if (!servicoId) {
+        alert("Selecione um serviço para vincular.");
         return;
       }
 
-      botao.disabled = true;
-      botao.innerHTML = "🔄 Vinculando...";
-      status.innerHTML = "⏳ Pendente";
+      btnVincular.disabled = true;
+      btnVincular.innerHTML = "🔄 Vinculando...";
+      status.innerHTML = "⏳ Processando...";
+
+      const formData = new FormData();
+      formData.append("evento_id", eventoId);
+      formData.append("servico_id", servicoId);
 
       try {
-        const formData = new FormData();
-        formData.append("evento_id", eventoId);
-        formData.append("codigo_servico", codigo);
-
-        const response = await fetch("/firehouse-php/public/eventos/vincularPorCodigo", {
+        const response = await fetch("/firehouse-php/public/eventos/vincularServico", {
           method: "POST",
           body: formData
         });
 
-        let data;
-        try {
-          data = await response.json();
-        } catch (jsonError) {
-          console.error("⚠️ Erro ao interpretar JSON:", jsonError);
-          alert("Erro inesperado na resposta do servidor.");
-          botao.disabled = false;
-          botao.innerHTML = "🔗 Vincular";
-          status.innerHTML = "❌ Erro inesperado";
-          return;
-        }
-
+        const data = await response.json();
         if (data.success) {
-          botao.innerHTML = "✅ Vinculado";
-          botao.style.backgroundColor = "#28a745";
-          status.innerHTML = "🟢 Confirmado";
-          input.disabled = true;
-          console.log("✅ Serviço vinculado com sucesso!");
-          setTimeout(() => window.location.reload(), 800);
+          status.innerHTML = "✅ Serviço vinculado com sucesso!";
+          btnVincular.innerHTML = "✅ Vinculado";
+          btnVincular.style.backgroundColor = "#28a745";
+          setTimeout(() => window.location.reload(), 1500);
         } else {
-          botao.disabled = false;
-          botao.innerHTML = "🔗 Vincular";
+          btnVincular.disabled = false;
+          btnVincular.innerHTML = "🔗 Vincular";
           status.innerHTML = "❌ " + (data.error || "Erro ao vincular serviço");
-          alert(data.error || "Erro ao vincular serviço.");
         }
       } catch (err) {
-        console.error("🚨 Erro na conexão ou requisição:", err);
-        botao.disabled = false;
-        botao.innerHTML = "🔗 Vincular";
-        status.innerHTML = "❌ Erro de conexão";
+        console.error("Erro:", err);
         alert("Erro ao conectar ao servidor.");
+        btnVincular.disabled = false;
+        btnVincular.innerHTML = "🔗 Vincular";
+      }
+    });
+  }
+
+  // ✅ Finalizar evento
+  window.finalizarEvento = async function() {
+    if (!confirm("Tem certeza que deseja finalizar este evento?")) return;
+
+    const formData = new FormData();
+    formData.append("evento_id", eventoId);
+
+    try {
+      const response = await fetch("/firehouse-php/public/eventos/finalizar", {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Evento finalizado com sucesso!");
+        location.reload();
+      } else {
+        alert(data.error || "Erro ao finalizar evento.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao finalizar evento.");
+    }
+  };
+
+  // ✅ Avaliar serviço
+  document.querySelectorAll(".btn-avaliar").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const servicoId = btn.dataset.servico;
+      document.getElementById("avaliar-" + servicoId).style.display = "block";
+    });
+  });
+
+  document.querySelectorAll(".btn-enviar-avaliacao").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const servicoId = btn.dataset.servico;
+      const container = document.getElementById("avaliar-" + servicoId);
+      const nota = container.querySelector(".nota").value;
+      const comentario = container.querySelector(".comentario").value.trim();
+
+      if (!nota || nota < 1 || nota > 5) {
+        alert("A nota deve ser entre 1 e 5.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("evento_id", eventoId);
+      formData.append("servico_id", servicoId);
+      formData.append("nota", nota);
+      formData.append("comentario", comentario);
+
+      try {
+        const response = await fetch("/firehouse-php/public/eventos/salvarAvaliacao", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          alert("Avaliação enviada com sucesso!");
+          location.reload();
+        } else {
+          alert(data.error || "Erro ao salvar avaliação.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Erro ao enviar avaliação.");
       }
     });
   });
 });
 </script>
-<script>
-async function finalizarEvento() {
-  const eventoId = document.querySelector("input[name='evento_id']").value;
-
-  if (!confirm("Tem certeza que deseja finalizar este evento?")) return;
-
-  const formData = new FormData();
-  formData.append("evento_id", eventoId);
-
-  try {
-    const response = await fetch("/firehouse-php/public//eventos/finalizar", {
-      method: "POST",
-      body: formData
-    });
-    const data = await response.json();
-
-    if (data.success) {
-      if (data.redirect) {
-        window.location.href = data.redirect; // ✅ vai para feedback
-      } else {
-        alert("Evento finalizado com sucesso!");
-        location.reload();
-      }
-    } else {
-      alert(data.error || "Erro ao finalizar evento.");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Erro na requisição.");
-  }
-}
-</script>
-
-
 </body>
 </html>

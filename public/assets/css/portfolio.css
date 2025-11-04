@@ -1,15 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+  --accent: #ff7a00;
+  --accent-hover: #ff9a3c;
+  --bg: #f9f9f9;
+  --card: #fff;
+  --text: #222;
+  --muted: #666;
+  --radius: 18px;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+}
+
 /* ===== BASE ===== */
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #fafafa;
-  color: #222;
+  background-color: var(--bg);
+  color: var(--text);
   margin: 0;
   padding: 0;
 }
 
 main.conteudo {
-  padding: 60px 20px;
-  min-height: calc(100vh - 120px);
+  padding: 70px 20px 100px;
+  min-height: calc(100vh - 140px);
 }
 
 .container {
@@ -17,121 +30,132 @@ main.conteudo {
   margin: 0 auto;
 }
 
-/* ===== TÍTULOS ===== */
+/* ===== CABEÇALHO ===== */
 .titulo {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ff7a00;
   text-align: center;
-  margin-bottom: 50px;
+  font-size: 2.2rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
-/* ===== LISTA DE SERVIÇOS ===== */
-.lista-servicos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 40px;
-  justify-items: center;
+.subtitulo {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 60px;
 }
 
-/* ===== CARD DE EVENTO ===== */
+/* ===== CARD ===== */
 .card-servico {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  padding: 28px 24px;
-  width: 100%;
-  max-width: 360px;
-  transition: all 0.25s ease;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  margin-bottom: 40px;
+  transition: all 0.3s ease;
+  border: 1px solid #f2f2f2;
 }
 
 .card-servico:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(255, 122, 0, 0.12);
 }
 
+/* ===== TÍTULO DO SERVIÇO ===== */
 .card-servico h3 {
   font-size: 1.4rem;
   font-weight: 700;
-  margin-bottom: 10px;
-  color: #ff7a00;
+  color: var(--accent);
+  margin-bottom: 14px;
 }
 
-.descricao-evento {
-  font-size: 0.95rem;
-  color: #444;
-  line-height: 1.5;
-  margin-bottom: 16px;
+/* ===== DETALHES ===== */
+.card-servico p {
+  margin: 6px 0;
+  font-size: 0.97rem;
+  color: #333;
 }
 
-/* ===== AVALIAÇÕES ===== */
-.avaliacoes {
-  background: #fff6ef;
-  border-left: 4px solid #ff7a00;
+.card-servico strong {
+  color: var(--accent);
+}
+
+.card-servico small {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* ===== AVALIAÇÃO ===== */
+.avaliacao {
+  background: #fff8f3;
+  border-left: 4px solid var(--accent);
   border-radius: 10px;
   padding: 16px 20px;
-}
-
-.avaliacoes h4 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #ff7a00;
-  font-size: 1.05rem;
-  font-weight: 600;
-}
-
-.avaliacao {
-  margin-bottom: 12px;
-}
-
-.avaliacao .comentario {
-  font-size: 0.95rem;
-  color: #333;
-  margin: 0;
-  line-height: 1.4;
+  margin-top: 20px;
 }
 
 .avaliacao .nota {
-  display: block;
-  font-weight: 600;
-  color: #ff7a00;
-  margin-top: 4px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.avaliacao .comentario {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin: 6px 0;
 }
 
 .avaliacao .cliente {
-  display: block;
   font-size: 0.85rem;
   color: #666;
-  margin-top: 2px;
 }
 
+/* ===== SEM AVALIAÇÃO ===== */
 .sem-avaliacao {
-  font-size: 0.9rem;
-  color: #777;
+  text-align: center;
   background: #f8f8f8;
-  padding: 10px 14px;
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-size: 0.95rem;
+  color: #777;
+  margin-top: 12px;
+}
+
+/* ===== BOTÕES (CASO TENHA ALGUM) ===== */
+.btn {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+  color: #fff;
+  padding: 10px 18px;
   border-radius: 8px;
-  text-align: center;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(255, 122, 0, 0.25);
+  transition: all 0.25s ease;
 }
 
-.sem-eventos {
-  text-align: center;
-  font-size: 1rem;
-  color: #555;
+.btn:hover {
+  background: var(--accent-hover);
+  transform: scale(1.04);
+  box-shadow: 0 6px 16px rgba(255, 122, 0, 0.3);
 }
 
-/* ===== RESPONSIVIDADE ===== */
+/* ===== RESPONSIVO ===== */
 @media (max-width: 768px) {
-  .titulo {
-    font-size: 1.6rem;
+  main.conteudo {
+    padding: 40px 15px 80px;
   }
 
-  .lista-servicos {
-    gap: 24px;
+  .titulo {
+    font-size: 1.8rem;
   }
 
   .card-servico {
     padding: 22px;
-    max-width: 100%;
   }
 }

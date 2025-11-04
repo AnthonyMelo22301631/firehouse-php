@@ -32,7 +32,7 @@ if (session_status() === PHP_SESSION_NONE) {
       <?php if (!empty($_SESSION['user_id'])): ?>
         <?php if (!empty($_SESSION['is_colaborador'])): ?>
           <!-- MODO COLABORADOR -->
-          <a href="/firehouse-php/public/colaboradores">Meus Serviços</a>
+          <a href="/firehouse-php/public/colaboradores/meus-servicos">Meus Serviços</a>
           <a href="/firehouse-php/public/colaboradores/create">Cadastrar Serviço</a>
           <a href="/firehouse-php/public/colaboradores/portfolio">Portfólio</a>
           <a href="/firehouse-php/public/auth/perfil">Perfil</a>

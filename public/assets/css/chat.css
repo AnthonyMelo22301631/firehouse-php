@@ -1,0 +1,135 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+.chat-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.chat-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-header {
+  background: #ff4d00;
+  color: #fff;
+  padding: 18px 24px;
+  border-radius: 16px 16px 0 0;
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.chat-header .subinfo {
+  font-size: 0.9rem;
+  margin-top: 6px;
+  color: #ffe5d1;
+}
+
+.chat-mensagens {
+  flex: 1;
+  padding: 20px;
+  background: #fafafa;
+  overflow-y: auto;
+  height: 400px;
+  border-bottom: 1px solid #eee;
+}
+
+.vazio {
+  text-align: center;
+  color: #aaa;
+  margin-top: 150px;
+}
+
+.mensagem {
+  margin-bottom: 15px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 75%;
+  line-height: 1.5;
+}
+
+.mensagem.minha {
+  background: #ffefe6;
+  margin-left: auto;
+  border: 1px solid #ff4d00;
+}
+
+.mensagem.deles {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+}
+
+.mensagem span {
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 6px;
+}
+
+.chat-form {
+  display: flex;
+  padding: 14px 20px;
+  background: #fff;
+}
+
+.chat-form textarea {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  resize: none;
+  font-family: inherit;
+}
+
+.btn-enviar {
+  background: #ff4d00;
+  color: #fff;
+  border: none;
+  margin-left: 12px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-enviar:hover {
+  background: #ff6930;
+}
+
+.acordo-form {
+  text-align: center;
+  padding: 16px;
+  background: #fff8f3;
+  border-top: 1px solid #ffe2d0;
+}
+
+.btn-fechar-acordo {
+  background: #ff4d00;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-fechar-acordo:hover {
+  background: #e64500;
+}

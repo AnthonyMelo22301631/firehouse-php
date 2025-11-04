@@ -21,7 +21,7 @@ require __DIR__ . '/../partials/header.php';
 
 <main class="conteudo">
   <div class="container">
-    <h2 class="titulo">🛠️ Cadastrar Novo Serviço</h2>
+    <h2 class="titulo">Cadastrar Novo Serviço</h2>
     <p class="descricao">Selecione o tipo de serviço que você oferece e descreva brevemente o que faz.</p>
 
     <form method="POST" action="/firehouse-php/public/colaboradores/store" class="form-servico">

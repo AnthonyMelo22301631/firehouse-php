@@ -1,0 +1,150 @@
+:root {
+  --accent: #ff7a00;
+  --accent-hover: #ff9640;
+  --danger: #e63946;
+  --danger-hover: #c92a34;
+  --muted: #555;
+  --card-bg: #fff;
+  --shadow: 0 6px 18px rgba(0,0,0,0.08);
+  --radius: 12px;
+}
+
+/* ===== BASE ===== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fafafa;
+  color: #222;
+  margin: 0;
+}
+
+main.conteudo {
+  padding: 60px 20px 100px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ===== TÍTULO ===== */
+.titulo {
+  text-align: center;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.aviso {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* ===== LISTA ===== */
+.lista-servicos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* ===== CARD ===== */
+.card-servico {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-servico:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 22px rgba(255, 122, 0, 0.15);
+}
+
+.card-servico h3 {
+  color: var(--accent);
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.card-servico p {
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.status {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.status .ativo {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.status .inativo {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* ===== BOTÕES ===== */
+.botoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.btn-ver,
+.btn-cancelar {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Ver detalhes */
+.btn-ver {
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  border: none;
+}
+
+.btn-ver:hover {
+  background: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+/* Cancelar serviço */
+.btn-cancelar {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+}
+
+.btn-cancelar:hover {
+  background: var(--danger-hover);
+  transform: scale(1.05);
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+  .lista-servicos {
+    grid-template-columns: 1fr;
+  }
+
+  .botoes {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-ver, .btn-cancelar {
+    width: 100%;
+    text-align: center;
+  }
+}

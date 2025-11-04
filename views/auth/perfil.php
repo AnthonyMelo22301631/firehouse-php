@@ -53,7 +53,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <main class="conteudo">
   <div class="container">
     <h2 class="titulo">
-      <?= $isOwner ? '🙍 Meu Perfil' : '👤 Perfil do Usuário' ?>
+      <?= $isOwner ? '🙍 Meu Perfil' : 'Perfil do Usuário' ?>
     </h2>
 
     <section class="card perfil">
@@ -111,7 +111,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
       <?php if ($isOwner): ?>
         <div class="acoes">
-          <a class="btn secundario" href="/firehouse-php/public/eventos/my">Meus eventos</a>
+          <a class="btn secundario" href="/firehouse-php/public/meus-eventos">Meus eventos</a>
           <a class="btn primario" href="/firehouse-php/public/eventos/create">Criar evento</a>
 
           <?php if (empty($_SESSION['is_colaborador'])): ?>

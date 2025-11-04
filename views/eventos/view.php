@@ -17,7 +17,7 @@ require __DIR__ . '/../partials/header.php';
 <main class="conteudo">
   <div class="container">
     <div class="card-evento">
-      <h1 class="titulo">📅 <?= htmlspecialchars($evento['titulo'] ?? 'Sem título') ?></h1>
+      <h1 class="titulo"> <?= htmlspecialchars($evento['titulo'] ?? 'Sem título') ?></h1>
 
       <p class="info"><strong>🏷️ Tipo:</strong> <?= htmlspecialchars($evento['tipo'] ?? '—') ?></p>
       <p class="info"><strong>📍 Local:</strong> <?= htmlspecialchars($evento['local'] ?? '—') ?></p>
@@ -36,7 +36,7 @@ require __DIR__ . '/../partials/header.php';
 
       <hr>
 
-      <h3 class="subtitulo">🧾 Descrição</h3>
+      <h3 class="subtitulo">Descrição</h3>
       <p class="descricao"><?= nl2br(htmlspecialchars($evento['descricao'] ?? 'Sem descrição.')) ?></p>
 
       <hr>

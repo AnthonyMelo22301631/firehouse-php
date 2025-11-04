@@ -104,7 +104,7 @@
 
       <button type="submit" class="btn-enviar">Enviar Avaliações</button>
     <?php else: ?>
-      <p>❌ Nenhum colaborador vinculado a este evento.</p>
+      <p>Nenhum colaborador vinculado a este evento.</p>
     <?php endif; ?>
   </form>
 </div>

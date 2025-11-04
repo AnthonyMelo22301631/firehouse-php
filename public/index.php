@@ -75,13 +75,21 @@ $router->get('/colaboradores/view', 'ColaboradorController@view');
 $router->post('/colaboradores/ativar', 'ColaboradorController@ativar');
 $router->post('/colaboradores/sair', 'ColaboradorController@sair');
 $router->get('/colaboradores/servicos', 'ColaboradorController@servicos');
+$router->get('/colaboradores/meus-servicos', 'ColaboradorController@meusServicos');
+$router->post('/colaboradores/cancelar-servico', 'ColaboradorController@cancelarServico');
 
 $router->get('/colaboradores/portfolio', 'ColaboradorController@portfolio');
-$router->get('/eventos/feedback', 'EventoController@feedback');
-$router->post('/eventos/salvar-feedback', 'EventoController@salvarFeedback');
-$router->post('/eventos/salvarFeedback', 'EventoController@salvarFeedback');
+$router->post('/colaboradores/cancelar', 'ColaboradoresController@cancelar');
+
+
+
 $router->get('/colaboradores/portfolio-public', 'ColaboradorController@portfolioPublic');
 $router->post('/eventos/finalizar', 'EventoController@finalizar');
+$router->post('/eventos/vincularServico', 'EventoController@vincularServico');
+$router->post('/eventos/salvarAvaliacao', 'EventoController@salvarAvaliacao');
+
+$router->get('/eventos/avaliar', 'EventoController@avaliarView');
+
 
 // =======================
 // 💬 Chat

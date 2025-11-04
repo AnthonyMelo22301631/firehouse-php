@@ -20,7 +20,7 @@ require __DIR__ . '/../partials/header.php';
 <main class="conteudo">
   <section class="hero-my">
     <div class="hero-texto">
-      <h1>🔥 Meus Eventos</h1>
+      <h1>Meus Eventos</h1>
       <p>Gerencie todos os eventos que você criou na FireHouse. Edite, visualize ou exclua facilmente.</p>
     </div>
   </section>

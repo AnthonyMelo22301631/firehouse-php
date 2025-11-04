@@ -11,17 +11,55 @@ class EventoRepository {
         $this->db = DB::pdo();
     }
 
-    /** 🔹 Buscar todos os eventos */
-    public function all(): array {
-        $sql = "SELECT e.*, u.nome AS criador, u.contato AS contato_criador
-                FROM eventos e
-                INNER JOIN users u ON u.id = e.user_id
-                WHERE e.status_evento IN ('aberto', 'em_andamento', 'finalizado')
-                ORDER BY e.data_evento DESC";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+   public function all(array $filtros = []): array {
+    $sql = "SELECT e.*, u.nome AS criador, u.contato AS contato_criador
+            FROM eventos e
+            INNER JOIN users u ON u.id = e.user_id
+            WHERE 1=1";
+
+    // 🔸 Filtros opcionais
+    if (!empty($filtros['tipo'])) {
+        $sql .= " AND e.tipo LIKE :tipo";
     }
+    if (!empty($filtros['cidade'])) {
+        $sql .= " AND e.cidade LIKE :cidade";
+    }
+    if (!empty($filtros['estado'])) {
+        $sql .= " AND e.estado = :estado";
+    }
+    if (!empty($filtros['status_evento'])) {
+        $sql .= " AND e.status_evento = :status_evento";
+    }
+    if (!empty($filtros['data_min'])) {
+        $sql .= " AND e.data_evento >= :data_min";
+    }
+
+    $sql .= " ORDER BY e.data_evento DESC";
+
+    $stmt = $this->db->prepare($sql);
+
+    // 🔸 Bind dinâmico
+    if (!empty($filtros['tipo'])) {
+        $stmt->bindValue(':tipo', "%{$filtros['tipo']}%");
+    }
+    if (!empty($filtros['cidade'])) {
+        $stmt->bindValue(':cidade', "%{$filtros['cidade']}%");
+    }
+    if (!empty($filtros['estado'])) {
+        $stmt->bindValue(':estado', $filtros['estado']);
+    }
+    if (!empty($filtros['status_evento'])) {
+        $stmt->bindValue(':status_evento', $filtros['status_evento']);
+    }
+    if (!empty($filtros['data_min'])) {
+        $stmt->bindValue(':data_min', $filtros['data_min']);
+    }
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
 
     /** 🔹 Buscar eventos do usuário logado */
     public function allByUser(int $userId): array {
@@ -34,6 +72,17 @@ class EventoRepository {
         $stmt->execute([':uid' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function delete(int $id): bool {
+    try {
+        $stmt = $this->db->prepare("DELETE FROM eventos WHERE id = :id");
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (\Throwable $e) {
+        error_log("Erro ao deletar evento: " . $e->getMessage());
+        return false;
+    }
+}
+
 
     /** 🔹 Criar novo evento */
     public function create(array $data): void {
@@ -87,28 +136,55 @@ class EventoRepository {
     }
 
     /** 🔹 Buscar evento específico */
-    public function findById(int $id): ?array {
-        $sql = "SELECT e.*, u.nome AS nome_criador, u.contato AS telefone_criador
-                FROM eventos e
-                INNER JOIN users u ON u.id = e.user_id
-                WHERE e.id = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([':id' => $id]);
-        $evento = $stmt->fetch(PDO::FETCH_ASSOC);
+   public function findById(int $id): ?array {
+    $sql = "SELECT e.*, u.nome AS nome_criador, u.contato AS telefone_criador
+            FROM eventos e
+            INNER JOIN users u ON u.id = e.user_id
+            WHERE e.id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([':id' => $id]);
+    $evento = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($evento) {
-            $evento['servicos_array'] = array_filter(array_map('trim', explode(',', $evento['servicos'] ?? '')));
-            $evento['servicos_vinculados'] = $this->getServicosVinculados($id);
-        }
+    if ($evento) {
+        // 🔹 Lista original de serviços solicitados ao criar o evento
+        $servicosSolicitados = array_filter(array_map('trim', explode(',', $evento['servicos'] ?? '')));
 
-        return $evento ?: null;
+        // 🔹 Serviços realmente vinculados no banco (tabela eventos_servicos)
+        $servicosVinculados = $this->getServicosVinculados($id);
+
+        // 🔹 Atualiza no array principal
+        $evento['servicos_vinculados'] = $servicosVinculados;
+
+        // 🔹 Combina os nomes dos serviços solicitados + os já vinculados (sem duplicar)
+        $nomesVinculados = array_column($servicosVinculados, 'nome');
+        $evento['servicos_array'] = array_unique(array_merge($servicosSolicitados, $nomesVinculados));
+
+        // 🔹 Garante consistência de dados
+        $evento['total_servicos'] = count($evento['servicos_array']);
+        $evento['total_vinculados'] = count($servicosVinculados);
     }
+
+    return $evento ?: null;
+}
+
 
     /** 🔹 Atualizar status do evento */
-    public function atualizarStatusEvento(int $eventoId, string $status): bool {
-        $stmt = $this->db->prepare("UPDATE eventos SET status_evento = :status WHERE id = :id");
-        return $stmt->execute([':status' => $status, ':id' => $eventoId]);
+   public function atualizarStatusEvento(int $eventoId, string $status): bool {
+    try {
+        $stmt = $this->db->prepare("
+            UPDATE eventos 
+            SET status_evento = :status 
+            WHERE id = :id
+        ");
+        return $stmt->execute([
+            ':status' => $status,
+            ':id' => $eventoId
+        ]);
+    } catch (\PDOException $e) {
+        error_log('Erro ao atualizar status do evento: ' . $e->getMessage());
+        return false;
     }
+}
 
     /** 🔹 Vincular serviço ao evento e marcar como vinculado */
     public function vincularServico(int $eventoId, int $servicoId): bool {

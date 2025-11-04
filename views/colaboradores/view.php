@@ -18,9 +18,9 @@ require __DIR__ . '/../partials/header.php';
 <main class="conteudo">
   <div class="container">
     <div class="card-evento">
-      <h1 class="titulo">💼 <?= htmlspecialchars($servico['nome'] ?? 'Serviço sem nome') ?></h1>
+      <h1 class="titulo"> <?= htmlspecialchars($servico['nome'] ?? 'Serviço sem nome') ?></h1>
 
-      <p class="info"><strong>👤 Prestador:</strong> <?= htmlspecialchars($colaborador->nome ?? 'Não informado') ?></p>
+      <p class="info"><strong>Prestador:</strong> <?= htmlspecialchars($colaborador->nome ?? 'Não informado') ?></p>
 
       <p class="info">
         <strong>📍 Localização:</strong>
@@ -51,20 +51,7 @@ require __DIR__ . '/../partials/header.php';
 
       <hr>
 
-      <h3 class="subtitulo">🔑 Código do Serviço</h3>
-      <p class="codigo-servico" style="font-size:1.2em; background:#f3f3f3; padding:10px; border-radius:6px; display:inline-block;">
-        <?= htmlspecialchars($servico['codigo_servico'] ?? 'Não gerado') ?>
-        <button onclick="copiarCodigo()" style="margin-left:10px; background:#007bff; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
-          Copiar
-        </button>
-      </p>
-
-      <script>
-      function copiarCodigo() {
-        const texto = "<?= htmlspecialchars($servico['codigo_servico'] ?? '') ?>";
-        navigator.clipboard.writeText(texto).then(() => alert("Código copiado: " + texto));
-      }
-      </script>
+    
 
       <div class="botoes" style="margin-top:20px; display:flex; flex-wrap:wrap; gap:10px;">
         <a href="/firehouse-php/public/colaboradores" class="btn-voltar" style="background:#ddd; color:#000; text-decoration:none; padding:8px 16px; border-radius:6px;">
