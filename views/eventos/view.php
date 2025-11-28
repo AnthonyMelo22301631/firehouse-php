@@ -17,12 +17,23 @@ require __DIR__ . '/../partials/header.php';
 <main class="conteudo">
   <div class="container">
     <div class="card-evento">
-      <h1 class="titulo"> <?= htmlspecialchars($evento['titulo'] ?? 'Sem título') ?></h1>
+      <h1 class="titulo"><?= htmlspecialchars($evento['titulo'] ?? 'Sem título') ?></h1>
 
       <p class="info"><strong>🏷️ Tipo:</strong> <?= htmlspecialchars($evento['tipo'] ?? '—') ?></p>
       <p class="info"><strong>📍 Local:</strong> <?= htmlspecialchars($evento['local'] ?? '—') ?></p>
       <p class="info"><strong>🗓️ Data:</strong> <?= date('d/m/Y H:i', strtotime($evento['data_evento'] ?? 'now')) ?></p>
       <p class="info"><strong>👤 Criado por:</strong> <?= htmlspecialchars($evento['nome_criador'] ?? '—') ?></p>
+
+      <p class="info">
+        <strong>📞 Contato do Criador:</strong>
+        <?php if (!empty($evento['telefone_criador'])): ?>
+          <a href="https://wa.me/55<?= preg_replace('/\D/', '', $evento['telefone_criador']) ?>" target="_blank" style="color:#007bff; text-decoration:none;">
+            <?= htmlspecialchars($evento['telefone_criador']) ?>
+          </a>
+        <?php else: ?>
+          Não informado
+        <?php endif; ?>
+      </p>
 
       <?php if (!empty($evento['servicos'])): ?>
         <h3 class="subtitulo">🛠️ Serviços solicitados</h3>
@@ -36,7 +47,7 @@ require __DIR__ . '/../partials/header.php';
 
       <hr>
 
-      <h3 class="subtitulo">Descrição</h3>
+      <h3 class="subtitulo">🧾 Descrição</h3>
       <p class="descricao"><?= nl2br(htmlspecialchars($evento['descricao'] ?? 'Sem descrição.')) ?></p>
 
       <hr>

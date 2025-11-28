@@ -5,8 +5,11 @@
   --card: #ffffff;
   --text: #222;
   --muted: #555;
-  --accent: #ff7a00;
-  --accent-2: #ff9a3c;
+
+  /* Paleta FireHouse */
+  --accent: #c43f3f;       /* vermelho */
+  --accent-2: #ff914d;     /* laranja */
+
   --radius: 12px;
   --shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   --header-height: 80px;
@@ -23,7 +26,7 @@ body {
 
 /* ===== HERO ===== */
 .hero-my {
-  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  background: linear-gradient(135deg, #c43f3f, #ff914d); /* 🔥 DEGRADÊ FIREHOUSE */
   color: #fff;
   text-align: center;
   padding: 100px 20px 80px;
@@ -87,7 +90,7 @@ body {
 
 .card-header h3 {
   font-size: 1.2rem;
-  color: var(--accent);
+  color: var(--accent-2);
   font-weight: 700;
   margin: 0;
 }
@@ -189,6 +192,7 @@ body {
     margin: 0 4px;
   }
 }
+
 /* ===== STATUS DOS EVENTOS ===== */
 .status-evento {
   display: inline-block;
@@ -214,4 +218,3 @@ body {
   background: #dc2626; /* vermelho */
   color: #fff;
 }
-

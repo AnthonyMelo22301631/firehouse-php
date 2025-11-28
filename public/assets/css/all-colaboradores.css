@@ -1,11 +1,13 @@
 /* ===== Lista de Colaboradores (all-colaboradores.css) ===== */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
+/* ===== FUNDO ===== */
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Poppins', sans-serif;
-  background: #fafafa;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #c43f3f, #ff914d);
   color: #333;
   min-height: 100vh;
 }
@@ -21,32 +23,34 @@ body {
 .container {
   max-width: 1000px;
   width: 100%;
-  background: #fff;
+  background: #ffffffdd;
+  backdrop-filter: blur(5px);
   padding: 40px 50px;
   border-radius: 14px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* ===== TÍTULO ===== */
 .titulo {
-  color: #ff4500;
+  color: #ff914d;
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 800;
   text-align: center;
   margin-bottom: 10px;
 }
 
 .descricao {
   text-align: center;
-  color: #555;
+  color: #444;
   font-size: 1rem;
   margin-bottom: 40px;
+  font-weight: 500;
 }
 
 /* ===== BOTÃO PRINCIPAL ===== */
 .btn-principal {
   display: inline-block;
-  background: #ff4500;
+  background: #ff914d;
   color: #fff;
   padding: 12px 22px;
   border-radius: 8px;
@@ -57,31 +61,37 @@ body {
 }
 
 .btn-principal:hover {
-  background: #ff6a00;
+  background: #ff7a1e;
   transform: translateY(-2px);
 }
 
-/* ===== LISTA DE SERVIÇOS ===== */
+/* ========================================================= */
+/* ===== CARDS FIREHOUSE (VERSÃO VERMELHA) ================= */
+/* ========================================================= */
+
 .servicos-lista {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
 }
 
 .servico-card {
-  background: #fff;
-  border: 1.5px solid #eee;
-  border-radius: 10px;
-  padding: 22px 24px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s;
+  background: #c43f3f;
+  border: 1.5px solid #ffe976;
+  border-radius: 14px;
+  padding: 24px 26px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: 0.25s;
+  color: #fff !important;
+  font-family: 'Poppins', sans-serif;
 }
 
 .servico-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 14px rgba(255, 69, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(196, 67, 63, 0.35);
 }
 
+/* ===== CABEÇALHO ===== */
 .servico-header {
   display: flex;
   justify-content: space-between;
@@ -90,54 +100,92 @@ body {
 }
 
 .servico-nome {
-  font-size: 1.2rem;
-  color: #ff4500;
+  font-size: 1.3rem;
   font-weight: 700;
   margin: 0;
+  color: #fff;
+  text-shadow: 0px 1px 3px rgba(0,0,0,0.35);
 }
 
 .servico-data {
-  font-size: 0.85rem;
-  color: #777;
-}
-
-.servico-desc {
-  color: #444;
-  font-size: 0.95rem;
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
-
-.servico-colab {
   font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 18px;
+  color: #ffe;
+  opacity: 0.9;
 }
 
-/* ===== BOTÃO SECUNDÁRIO ===== */
+/* ===== DESCRIÇÃO ===== */
+.servico-desc {
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 14px;
+  line-height: 1.6;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.35);
+}
+
+/* ===== COLABORADOR NOME ===== */
+.servico-colab {
+  font-size: 0.95rem;
+  color: #fff;
+  margin-bottom: 18px;
+  font-weight: 500;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.35);
+}
+
+/* ========================================================= */
+/* ===== BOTÃO DO PORTFÓLIO (NOVO .btn-portfolio) ========== */
+/* ========================================================= */
+
+.btn-portfolio {
+  display: inline-block;
+  background: #ffe976;               /* amarelo pastel */
+  color: #c43f3f !important;         /* vermelho FireHouse */
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none !important;  /* tira sublinhado */
+  transition: all 0.25s;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 10px rgba(255, 233, 118, 0.4);
+}
+
+.btn-portfolio:hover {
+  background: #fff;
+  color: #b8322b !important;         /* vermelho mais escuro */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 233, 118, 0.55);
+}
+
+/* ========================================================= */
+/* ===== BOTÃO SECUNDÁRIO (Opcional) ======================= */
+/* ========================================================= */
+
 .btn-sec {
   display: inline-block;
   background: transparent;
-  color: #ff4500;
-  border: 1.5px solid #ff4500;
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-weight: 600;
+  color: #fff;
+  border: 1.8px solid #fff;
+  border-radius: 10px;
+  padding: 9px 15px;
+  font-weight: 700;
   text-decoration: none;
-  transition: all 0.3s;
+  transition: 0.25s;
 }
 
 .btn-sec:hover {
-  background: #ff4500;
-  color: #fff;
+  background: #fff;
+  color: #c43f3f;
+  transform: translateY(-2px);
 }
 
 /* ===== AVISO ===== */
 .aviso {
   text-align: center;
-  color: #777;
+  color: #fff;
   font-style: italic;
   margin-top: 20px;
+  background: #c43f3fbb;
+  padding: 12px;
+  border-radius: 8px;
 }
 
 /* ===== RESPONSIVIDADE ===== */

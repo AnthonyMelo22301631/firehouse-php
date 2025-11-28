@@ -21,14 +21,7 @@
   ?>
 
   <main class="conteudo">
-    <section class="hero-create">
-      <div class="hero-texto">
-        <h1>Crie Seu Evento</h1>
-        <p>Compartilhe sua ideia e permita que colaboradores se conectem ao seu projeto.</p>
-      </div>
-    </section>
-
-    <section class="form-section">
+       <section class="form-section">
       <div class="container">
         <form method="post" action="/firehouse-php/public/eventos/store" class="form-card">
           <h2>Detalhes do Evento</h2>

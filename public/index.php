@@ -80,8 +80,8 @@ $router->post('/colaboradores/cancelar-servico', 'ColaboradorController@cancelar
 
 $router->get('/colaboradores/portfolio', 'ColaboradorController@portfolio');
 $router->post('/colaboradores/cancelar', 'ColaboradoresController@cancelar');
-
-
+$router->get('/auth/termos', 'AuthController@termos');
+$router->post('/auth/aceitar-termos', 'AuthController@aceitarTermos');
 
 $router->get('/colaboradores/portfolio-public', 'ColaboradorController@portfolioPublic');
 $router->post('/eventos/finalizar', 'EventoController@finalizar');

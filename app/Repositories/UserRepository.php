@@ -23,8 +23,9 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     public function create(array $data): ?User {
-        $sql = "INSERT INTO users (nome, email, password_hash, estado, cidade, contato, is_colaborador)
-                VALUES (:nome, :email, :password_hash, :estado, :cidade, :contato, 0)";
+        $sql = "INSERT INTO users (nome, email, password_hash, estado, cidade, contato, is_colaborador, aceitou_termos)
+                VALUES (:nome, :email, :password_hash, :estado, :cidade, :contato, 0, 0)";
+        
         $st = DB::pdo()->prepare($sql);
 
         $ok = $st->execute([
@@ -40,6 +41,11 @@ class UserRepository implements UserRepositoryInterface {
 
         $id = (int) DB::pdo()->lastInsertId();
         return $this->findById($id);
+    }
+
+    public function updateTerms(int $id): bool {
+        $st = DB::pdo()->prepare("UPDATE users SET aceitou_termos = 1 WHERE id = ?");
+        return $st->execute([$id]);
     }
 
     public function setColaboradorStatus(int $userId, bool $status): void {

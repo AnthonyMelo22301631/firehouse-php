@@ -1,0 +1,109 @@
+/* ======== Container geral ======== */
+body {
+    background: #f4f4f4;
+    font-family: 'Inter', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container-termo {
+    max-width: 900px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+
+/* ======== Título ======== */
+.titulo {
+    text-align: center;
+    color: #d60000;
+    margin-bottom: 25px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+/* ======== Caixa do conteúdo ======== */
+.caixa-termo {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    padding: 25px;
+    border-radius: 10px;
+    height: 350px;
+    overflow-y: auto;
+    line-height: 1.6;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Scroll bonito */
+.caixa-termo::-webkit-scrollbar {
+    width: 8px;
+}
+.caixa-termo::-webkit-scrollbar-track {
+    background: #e6e6e6;
+    border-radius: 10px;
+}
+.caixa-termo::-webkit-scrollbar-thumb {
+    background: #d60000;
+    border-radius: 10px;
+}
+
+/* ======== Checkbox ======== */
+.form-termo {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.checkbox input {
+    margin-right: 10px;
+}
+
+/* ======== Botão ======== */
+.btn-aceitar {
+    background: linear-gradient(90deg, #d60000, #ff3c3c);
+    color: #fff;
+    border: none;
+    padding: 14px 35px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-weight: 600;
+}
+
+.btn-aceitar:hover {
+    background: linear-gradient(90deg, #ff3c3c, #d60000);
+    transform: translateY(-2px);
+}
+
+/* ======== Responsividade ======== */
+@media (max-width: 600px) {
+    .container-termo {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .titulo {
+        font-size: 24px;
+    }
+
+    .caixa-termo {
+        height: 280px;
+    }
+
+    .btn-aceitar {
+        width: 100%;
+    }
+}

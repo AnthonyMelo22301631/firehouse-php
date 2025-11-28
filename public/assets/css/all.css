@@ -1,64 +1,71 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+/* ===== Eventos (all-eventos.css) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --bg: #ffffff;
-  --card: #ffffff;
+  --card: #ffffffdd;           /* translúcido igual ao colaboradores */
   --text: #222;
   --muted: #555;
-  --accent: #ff7a00;
-  --accent-2: #ff9a3c;
+
+  /* Paleta FireHouse */
+  --laranja: #ff914d;
+  --laranja-escuro: #ff7a1e;
+  --amarelo-pastel: #ffe976;
+  --vermelho: #c43f3f;
+
   --radius: 14px;
-  --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  --shadow-hover: 0 8px 28px rgba(255, 122, 0, 0.25);
-  --header-height: 80px;
+  --shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  --shadow-hover: 0 8px 22px rgba(255, 145, 77, 0.28);
 }
 
-/* ===== BASE ===== */
+/* ===== FUNDO ===== */
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Poppins', sans-serif;
-  display: flex;
-  flex-direction: column;
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+/* 🎨 FUNDO EXATAMENTE IGUAL AO COLABORADORES */
+body {
+  background: linear-gradient(135deg, #c43f3f, #ff914d);
+  min-height: 100vh;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 /* ===== CONTEÚDO ===== */
 main.conteudo {
-  flex: 1;
   padding: 80px 20px 100px;
-  margin: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .container {
   max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  background: var(--card);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius);
+  padding: 40px 50px;
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.18);
 }
 
 /* ===== TÍTULOS ===== */
 .titulo {
   text-align: center;
-  font-size: 2.3rem;
-  color: var(--accent);
-  font-weight: 700;
-  margin-bottom: 6px;
-  letter-spacing: 0.5px;
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: var(--laranja);
+  margin-bottom: 10px;
 }
 
 .subtitulo {
   text-align: center;
-  color: var(--muted);
-  font-size: 1.05rem;
-  margin-bottom: 50px;
-}
-
-.aviso {
-  text-align: center;
-  color: var(--muted);
-  font-size: 1rem;
-  margin-top: 40px;
+  font-size: 1.1rem;
+  color: #444;
+  font-weight: 500;
+  margin-bottom: 45px;
 }
 
 /* ===== FORM DE FILTROS ===== */
@@ -66,85 +73,85 @@ form[method="GET"] {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin: 25px 0;
-  background: #f9f9f9;
-  padding: 20px;
+  background: #ffffffee;
+  backdrop-filter: blur(4px);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  padding: 18px;
+  margin-bottom: 35px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
 }
 
 form[method="GET"] input,
 form[method="GET"] select {
   padding: 10px 14px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
+  background: #fff;
   font-size: 0.95rem;
   flex: 1;
   min-width: 150px;
-  transition: all 0.2s ease;
+  transition: 0.2s;
 }
 
 form[method="GET"] input:focus,
 form[method="GET"] select:focus {
-  border-color: var(--accent);
+  border-color: var(--laranja);
+  box-shadow: 0 0 0 3px rgba(255, 145, 77, 0.25);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.2);
 }
 
+/* Botão Filtrar */
 form[method="GET"] button[type="submit"] {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: var(--laranja);
   color: #fff;
   border: none;
-  border-radius: 8px;
   padding: 10px 18px;
+  font-weight: 700;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.25);
+  transition: 0.25s;
 }
 
 form[method="GET"] button[type="submit"]:hover {
+  background: var(--laranja-escuro);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-  opacity: 0.95;
 }
 
 form[method="GET"] a {
-  color: #666;
-  text-decoration: none;
-  align-self: center;
+  color: #555;
   font-weight: 600;
-  transition: color 0.2s;
+  align-self: center;
+  text-decoration: none;
 }
 
 form[method="GET"] a:hover {
-  color: var(--accent);
+  color: var(--laranja);
 }
 
 /* ===== GRID ===== */
 .grid-eventos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 28px;
 }
 
-/* ===== CARD ===== */
+/* ========================================================= */
+/* ===== CARD COM DEGRADÊ + LEITURA OTIMIZADA ============== */
+/* ========================================================= */
+
 .card-evento {
-  background: var(--card);
+  background: linear-gradient(135deg, var(--laranja), var(--vermelho));
   border-radius: var(--radius);
+  border: 1.5px solid var(--amarelo-pastel);
+  padding: 24px;
   box-shadow: var(--shadow);
-  padding: 26px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: all 0.3s ease;
-  border: 1px solid #f2f2f2;
-  position: relative;
-  overflow: hidden;
+  transition: 0.25s;
+  color: #fff !important;
+  font-family: 'Poppins', sans-serif;
 }
 
 .card-evento:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
 }
 
@@ -152,119 +159,86 @@ form[method="GET"] a:hover {
 .card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 10px;
 }
 
 .card-header h3 {
-  font-size: 1.2rem;
-  color: var(--accent);
+  font-size: 1.3rem;
   font-weight: 700;
+  color: #fff !important;
   margin: 0;
+  text-shadow: 0px 1px 3px rgba(0,0,0,0.35);
 }
 
 .tag-data {
-  background: var(--accent-2);
-  color: #fff;
+  background: var(--amarelo-pastel);
   padding: 5px 12px;
-  border-radius: 8px;
-  font-size: 0.85rem;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(255, 154, 60, 0.4);
+  border-radius: 8px;
+  color: #333;
 }
 
-/* Corpo */
-.card-body {
-  flex: 1;
-  margin-top: 10px;
-}
-
-.card-body p {
-  margin: 6px 0;
-  font-size: 0.95rem;
-  color: var(--text);
-  line-height: 1.4;
+/* ===== CORPO DO CARD ===== */
+.card-body p,
+.card-body span,
+.card-body i,
+.card-body svg,
+.card-body small {
+  color: #fff !important;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.35);
+  font-size: 1rem;
 }
 
 .card-body strong {
-  color: var(--accent);
-}
-
-/* Rodapé */
-.card-footer {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
+  color: #fff !important;
+  font-weight: 700;
 }
 
 /* ===== BOTÕES ===== */
-.btn-ver,
-.btn-candidatar {
-  text-decoration: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.92rem;
-  transition: all 0.25s ease;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+.card-footer {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
 }
 
 .btn-ver {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: rgba(255,255,255,0.2);
   color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.25s;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.4);
 }
 
 .btn-ver:hover {
+  background: rgba(255,255,255,0.35);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-  opacity: 0.9;
 }
 
 .btn-candidatar {
   background: transparent;
-  color: var(--accent);
-  border: 2px solid var(--accent);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-candidatar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  transition: all 0.3s ease;
-  z-index: 0;
-}
-
-.btn-candidatar:hover::before {
-  left: 0;
-}
-
-.btn-candidatar span,
-.btn-candidatar {
-  position: relative;
-  z-index: 1;
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 10px;
+  transition: 0.25s;
 }
 
 .btn-candidatar:hover {
-  color: #fff;
+  background: #fff;
+  color: var(--vermelho);
   transform: translateY(-2px);
 }
 
-/* ===== STATUS ===== */
+/* ===== STATUS BADGES ===== */
 .status-evento {
-  display: inline-block;
   padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-transform: capitalize;
+  border-radius: 6px;
+  font-weight: 700;
 }
 
 .status-aberto {
@@ -273,19 +247,19 @@ form[method="GET"] a:hover {
 }
 
 .status-em_andamento {
-  background: #facc15;
-  color: #222;
+  background: #ffe976;
+  color: #333;
 }
 
 .status-finalizado {
-  background: #dc2626;
+  background: #c43f3f;
   color: #fff;
 }
 
 /* ===== RESPONSIVO ===== */
 @media (max-width: 768px) {
   .titulo {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 
   form[method="GET"] {
@@ -294,12 +268,10 @@ form[method="GET"] a:hover {
 
   .card-footer {
     flex-direction: column;
-    gap: 12px;
   }
 
   .btn-ver,
   .btn-candidatar {
     width: 100%;
-    text-align: center;
   }
 }

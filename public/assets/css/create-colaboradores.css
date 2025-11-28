@@ -5,7 +5,9 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
-  background: #fafafa;
+
+  /* 🔥 NOVO DEGRADÊ FIREHOUSE */
+  background: linear-gradient(135deg, #c43f3f 0%, #ff914d 50%, #ffe976 100%);
   color: #333;
   min-height: 100vh;
 }
@@ -19,18 +21,19 @@ body {
   padding: 40px 20px 80px;
 }
 
+/* Card branco onde fica o formulário */
 .container {
-  background: #fff;
+  background: #ffffff;
   padding: 40px 50px;
   border-radius: 14px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
   width: 100%;
   max-width: 620px;
   box-sizing: border-box;
 }
 
 .titulo {
-  color: #ff4500;
+  color: #c43f3f;
   font-size: 1.9rem;
   font-weight: 700;
   text-align: center;
@@ -70,8 +73,8 @@ input, textarea, select {
 }
 
 input:focus, textarea:focus, select:focus {
-  border-color: #ff4500;
-  box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.15);
+  border-color: #c43f3f;
+  box-shadow: 0 0 0 2px rgba(196, 63, 63, 0.2);
   outline: none;
 }
 
@@ -79,7 +82,7 @@ input:focus, textarea:focus, select:focus {
 select {
   background: #fff;
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ff4500' d='M5 7l5 5 5-5z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23c43f3f' d='M5 7l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 14px;
@@ -87,7 +90,7 @@ select {
 
 /* Botão */
 .btn-principal {
-  background: #ff4500;
+  background: #c43f3f;
   color: #fff;
   border: none;
   padding: 14px;
@@ -100,9 +103,9 @@ select {
 }
 
 .btn-principal:hover {
-  background: #ff6a00;
+  background: #a72f2f;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(255, 69, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(196, 63, 63, 0.4);
 }
 
 /* ===== RESPONSIVIDADE ===== */

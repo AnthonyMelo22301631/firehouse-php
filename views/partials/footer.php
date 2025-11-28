@@ -18,6 +18,9 @@
       <a href="/firehouse-php/public/sobrenos">Sobre Nós</a>
       <a href="/firehouse-php/public/faq">FAQ</a>
       <a href="/firehouse-php/public/contato">Contato</a>
+
+      <!-- ✅ Novo link inserido -->
+      <a href="/firehouse-php/public/auth/termos">Termos de Consentimento</a>
     </nav>
 
     <!-- REDES SOCIAIS -->

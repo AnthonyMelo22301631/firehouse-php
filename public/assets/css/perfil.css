@@ -1,111 +1,111 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 :root {
-  --bg: #fafafa;
-  --card: #ffffff;
+  --card: #ffffffee;
   --text: #222;
   --muted: #555;
+
   --accent: #ff7a00;
   --accent-2: #ff9a3c;
-  --radius: 12px;
-  --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  --header-height: 72px;
 
-  /* Novas cores */
-  --colab-ativo: #3b82f6;
-  --colab-hover: #2563eb;
-  --colab-gradiente: linear-gradient(120deg, #3b82f6, #60a5fa);
+  --fire-red: #c43f3f;
+  --fire-orange: #ff914d;
+  --fire-yellow: #ffe976;
+
+  --radius: 14px;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+
+  --header-height: 75px;
 }
 
-/* ===== BASE ===== */
+/* ===== FUNDO FULLSCREEN ===== */
 html, body {
-  height: 100%;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-body {
-  background: var(--bg);
+  padding: 0;
+  height: 100%;
   font-family: 'Poppins', sans-serif;
-  color: var(--text);
-  padding-top: var(--header-height);
+
+  background: linear-gradient(135deg, var(--fire-red), var(--fire-orange), var(--fire-yellow));
+  background-attachment: fixed;
+  background-size: cover;
 }
 
+/* ===== CONTEÚDO ===== */
 main.conteudo {
-  flex: 1;
-  padding: 100px 20px 80px; /* 🔥 espaçamento maior do topo */
+  padding: 110px 20px 90px;
+  width: 100%;
   display: flex;
   justify-content: center;
+  box-sizing: border-box;
 }
 
-.container {
-  width: 100%;
-  max-width: 600px;
-}
-
-/* ===== TÍTULO ===== */
+/* ===== TÍTULO (CORRIGIDO) ===== */
 .titulo {
   text-align: center;
-  color: var(--accent);
+  color: #ffffff;       /* 🔥 agora branco */
   margin-bottom: 30px;
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 700;
 }
 
 /* ===== CARD PERFIL ===== */
+.container {
+  width: 100%;
+  max-width: 650px;
+}
+
 .card.perfil {
   background: var(--card);
-  padding: 40px 30px;
+  padding: 45px 35px;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 25px;
+  gap: 28px;
 }
 
-/* Avatar com inicial */
+/* Avatar */
 .avatar {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 34px;
-  font-weight: 700;
+  align-items: center;
   color: #fff;
+  font-size: 38px;
+  font-weight: 700;
   box-shadow: var(--shadow);
 }
 
-/* Informações */
+/* Info */
 .info {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .linha {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e5e5e5;
   padding-bottom: 6px;
 }
 
 .label {
-  font-weight: 600;
   color: var(--muted);
+  font-weight: 600;
 }
 
 .valor {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text);
 }
 
-/* ===== BOTÕES ===== */
+/* ===== AÇÕES ===== */
 .acoes {
   display: flex;
   gap: 12px;
@@ -114,14 +114,14 @@ main.conteudo {
 }
 
 .btn {
-  padding: 10px 16px;
+  padding: 12px 20px;
   border-radius: var(--radius);
   font-weight: 600;
   text-decoration: none;
   color: #fff;
-  transition: all 0.25s ease;
-  border: none;
+  transition: 0.25s;
   cursor: pointer;
+  border: none;
 }
 
 .btn:hover {
@@ -129,39 +129,36 @@ main.conteudo {
   opacity: 0.9;
 }
 
-/* Gradientes principais */
+/* Botões principais */
 .btn.primario {
-  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
 }
 
 .btn.secundario {
-  background: var(--colab-gradiente);
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+
+.btn.colaborador-ativo {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
 }
 
 .btn.danger {
   background: #dc2626;
 }
 
-/* Específico para “modo colaborador ativo” */
-.btn.colaborador-ativo {
-  background: linear-gradient(120deg, #16a34a, #22c55e);
-}
-
-.btn.colaborador-ativo:hover {
-  background: linear-gradient(120deg, #15803d, #16a34a);
-}
-
 /* ===== RESPONSIVO ===== */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   main.conteudo {
-    padding: 80px 16px 60px;
+    padding: 90px 16px 60px;
   }
 
   .card.perfil {
-    padding: 30px 20px;
+    padding: 30px 22px;
   }
 
-  .titulo {
-    font-size: 1.7rem;
+  .avatar {
+    width: 85px;
+    height: 85px;
+    font-size: 30px;
   }
 }

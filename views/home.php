@@ -123,15 +123,15 @@
     <h2>O que dizem sobre a FireHouse</h2>
     <div class="feedback-container">
       <div class="feedback-card">
-        <img src="/firehouse-php/public/assets/imagens/pessoa1.jpg" alt="Cliente 1">
+        <img src="/firehouse-php/public/assets/imagens/mauro.png" alt="Cliente 1">
         <p>“A FireHouse superou todas as nossas expectativas! Evento impecável.”</p>
       </div>
       <div class="feedback-card">
-        <img src="/firehouse-php/public/assets/imagens/pessoa2.jpg" alt="Cliente 2">
+        <img src="/firehouse-php/public/assets/imagens/kanye.png" alt="Cliente 2">
         <p>“Equipe muito atenciosa e profissional. Tornaram nosso sonho realidade.”</p>
       </div>
       <div class="feedback-card">
-        <img src="/firehouse-php/public/assets/imagens/pessoa3.jpg" alt="Cliente 3">
+        <img src="/firehouse-php/public/assets/imagens/danielmc.png" alt="Cliente 3">
         <p>“Cada detalhe foi pensado com carinho. Recomendo de olhos fechados!”</p>
       </div>
     </div>

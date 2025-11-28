@@ -244,22 +244,23 @@ class EventoRepository {
 }
 
     /** 🔹 Retorna todos os serviços vinculados ao evento */
-    public function getServicosVinculados(int $eventoId): array {
-        $sql = "SELECT 
-                    s.id, 
-                    s.nome, 
-                    s.descricao, 
-                    s.status, 
-                    s.codigo_servico,
-                    s.vinculado,
-                    s.evento_id
-                FROM servicos s
-                INNER JOIN eventos_servicos es ON es.servico_id = s.id
-                WHERE es.evento_id = :evento";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([':evento' => $eventoId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+   public function getServicosVinculados(int $eventoId): array {
+    $sql = "SELECT 
+                s.id, 
+                s.nome, 
+                s.descricao, 
+                s.status, 
+                s.preco,
+                s.vinculado,
+                s.evento_id
+            FROM servicos s
+            INNER JOIN eventos_servicos es ON es.servico_id = s.id
+            WHERE es.evento_id = :evento";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([':evento' => $eventoId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
     /** 🔹 Buscar colaboradores vinculados */
     public function getColaboradoresDoEvento(int $eventoId): array {

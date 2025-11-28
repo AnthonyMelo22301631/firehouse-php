@@ -2,7 +2,7 @@
 namespace App\Controllers;
 
 use App\Core\View;
-use App\Repositories\UserRepository; // ✅ importação correta
+use App\Repositories\UserRepository;
 use Exception;
 
 class AuthController {
@@ -14,24 +14,43 @@ class AuthController {
         }
 
         try {
-            // ✅ garante o carregamento correto da classe UserRepository
             $this->users = new UserRepository();
         } catch (Exception $e) {
             die('Erro ao carregar UserRepository: ' . $e->getMessage());
         }
     }
 
-    /** 🔹 Exibe tela de login */
+    /** 🔹 Tela dos Termos */
+    public function termos() {
+        return View::render('auth/termos');
+    }
+
+    /** 🔹 Aceitar termos */
+    public function aceitarTermos() {
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /firehouse-php/public/auth/login");
+            exit;
+        }
+
+        // Atualiza no banco
+        $this->users->updateTerms($_SESSION['user_id']);
+
+        // Agora pode acessar tudo normalmente
+        header("Location: /firehouse-php/public/");
+        exit;
+    }
+
+    /** 🔹 Tela de login */
     public function showLogin() {
         return View::render('auth/login');
     }
 
-    /** 🔹 Exibe tela de cadastro */
+    /** 🔹 Tela de registro */
     public function showRegister() {
         return View::render('auth/register');
     }
 
-    /** 🔹 Login */
+    /** 🔹 Login — SEM verificação de termos */
     public function login() {
         $email = trim($_POST['email'] ?? '');
         $senha = $_POST['password'] ?? '';
@@ -45,6 +64,7 @@ class AuthController {
         $_SESSION['user_id'] = $user->id;
         $_SESSION['is_colaborador'] = (bool)$user->is_colaborador;
 
+        // 🔥 Agora vai direto para o sistema SEM pedir termos nunca mais
         header('Location: /firehouse-php/public/');
         exit;
     }
@@ -58,7 +78,7 @@ class AuthController {
         $cidade  = trim($_POST['cidade'] ?? '');
         $contato = trim($_POST['contato'] ?? '');
 
-        // ✅ Validação
+        // Validação
         if (
             $nome === '' ||
             !filter_var($email, FILTER_VALIDATE_EMAIL) ||
@@ -72,6 +92,7 @@ class AuthController {
             ]);
         }
 
+        // Já existe email
         if ($this->users->findByEmail($email)) {
             return View::render('auth/register', [
                 'error' => 'E-mail já cadastrado.'
@@ -95,34 +116,16 @@ class AuthController {
             ]);
         }
 
+        // Loga automaticamente após cadastro
         $_SESSION['user_id'] = $user->id;
-        $_SESSION['is_colaborador'] = (bool)$user->is_colaborador;
 
-        header('Location: /firehouse-php/public/');
+        // 🔥 Agora SIM: mostra os termos (somente no registro)
+        header("Location: /firehouse-php/public/auth/termos");
         exit;
     }
 
     /** 🔹 Logout */
     public function logout() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $_SESSION = [];
-
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(
-                session_name(),
-                '',
-                time() - 42000,
-                $params["path"],
-                $params["domain"],
-                $params["secure"],
-                $params["httponly"]
-            );
-        }
-
         session_destroy();
         session_regenerate_id(true);
 
@@ -130,20 +133,14 @@ class AuthController {
         exit;
     }
 
-    /** 🔹 Exibe perfil do usuário logado ou outro via ID */
+    /** 🔹 Perfil */
     public function perfil() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        // ✅ prioriza o usuário logado, mas permite visualizar outro via ?id=#
-        $id = $_GET['id'] ?? $_SESSION['user_id'] ?? null;
-
-        if (!$id) {
+        if (!isset($_SESSION['user_id'])) {
             echo "Usuário não encontrado.";
             return;
         }
 
+        $id = $_GET['id'] ?? $_SESSION['user_id'];
         $user = $this->users->findById((int)$id);
 
         if (!$user) {
@@ -151,7 +148,7 @@ class AuthController {
             return;
         }
 
-        $isOwner = isset($_SESSION['user_id']) && $_SESSION['user_id'] == $id;
+        $isOwner = ($_SESSION['user_id'] == $id);
 
         return View::render('auth/perfil', [
             'user' => $user,

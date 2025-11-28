@@ -140,15 +140,20 @@ class ServicoRepository {
         return $servico ?: null;
     }
 
-    /** 🔹 Retorna serviços disponíveis (ainda não vinculados) */
-    public function getServicosDisponiveis(): array {
-        $sql = "SELECT s.id, s.nome, s.descricao, s.codigo_servico, u.nome AS colaborador
-                FROM servicos s
-                INNER JOIN users u ON u.id = s.user_id
-                WHERE (s.vinculado = 0 OR s.vinculado IS NULL)
-                  AND s.status = 'ativo'
-                ORDER BY s.nome ASC";
-        $stmt = $this->db->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    /** 🔹 Retorna serviços disponíveis (ainda não vinculados) */public function getServicosDisponiveis(): array {
+    $sql = "SELECT 
+                s.id, 
+                s.nome, 
+                s.descricao, 
+                s.preco,
+                u.nome AS colaborador
+            FROM servicos s
+            INNER JOIN users u ON u.id = s.user_id
+            WHERE (s.vinculado = 0 OR s.vinculado IS NULL)
+              AND s.status = 'ativo'
+            ORDER BY s.nome ASC";
+    $stmt = $this->db->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 }
